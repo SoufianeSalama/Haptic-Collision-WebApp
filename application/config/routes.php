@@ -52,3 +52,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// WELCOME
+$route["login"] = "welcome";
+$route["register"] = "welcome/registerView";
+$route["password"] = "welcome/passwordForgotView";
+
+// APPLICATION
+$route["mypatients"] = "application/myPatientsView";
+$route["patient"] = "application/patientProfileView";
+$route["users"] = "application/userSettingsView";

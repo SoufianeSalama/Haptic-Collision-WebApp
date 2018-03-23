@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Application extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -20,31 +20,32 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-	    $this->loginView();
+		$this->myPatientsView();
 	}
 
     private function showView($sTemplateContent, $sTemplateName){
+        $aData["username"] = "Soufiane Salama";
 
         $aData["sTemplateContent"] = $sTemplateContent;
         $aData["sTemplateName"] = $sTemplateName;
-        $this->load->view('welcome_masterview', $aData);
+        $this->load->view('application_masterview', $aData);
     }
 
-    public function loginView(){
+    public function myPatientsView(){
         $aData = array();
-        $sTemplateHome = $this->load->view('templates/welcome/login_template', $aData, true);
-        $this->showView($sTemplateHome, "Login");
+        $sTemplateHome = $this->load->view('templates/application/mypatients_template', $aData, true);
+        $this->showView($sTemplateHome, "My Patients");
     }
 
-    public function registerView(){
+    public function patientProfileView(){
         $aData = array();
-        $sTemplateHome = $this->load->view('templates/welcome/register_template', $aData, true);
-        $this->showView($sTemplateHome, "Register");
+        $sTemplateHome = $this->load->view('templates/application/patient_template', $aData, true);
+        $this->showView($sTemplateHome, "Patient Profile");
     }
 
-    public function passwordForgotView(){
+    public function userSettingsView(){
         $aData = array();
-        $sTemplateHome = $this->load->view('templates/welcome/password_template', $aData, true);
-        $this->showView($sTemplateHome, "Forgot password");
+        $sTemplateHome = $this->load->view('templates/application/users_template', $aData, true);
+        $this->showView($sTemplateHome, "Users Settings");
     }
 }

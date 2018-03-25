@@ -65,3 +65,7 @@ $route["users"] = "application/userSettingsView";
 
 // APPLICATION FORMS
 $route["clinicalmeasdata"] = "application/clinicalMeasDataForm";
+
+// APPLICATION UPLOAD DATA
+$route["upload"] = "application/radiographAnalyzeData";
+

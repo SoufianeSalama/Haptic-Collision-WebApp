@@ -1069,3 +1069,59 @@ if (isset($bAlert) && !empty($bAlert)){
     });
 </script>
 
+<!-- Modal: Upload/Download Radiograph Analyze (excel) Data -->
+<div id="modalExcelData" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Radiograph Analyze Data (excel)</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Upload Data</h4>
+                <div class="row">
+                    <div class="col-sm-12 col-md-10  col-md-offset-1 ">
+                        <?php
+                        echo form_open_multipart('upload');?>
+                        <div class="form-group" style="width: 100%; margin-top: 15px;">
+                            <input type="hidden" name="frmUploadDataEAD" value="<?php echo $aPatient->ead; ?>">
+                            <input type="file" name="frmUploadData" class="form-control" size="20">
+                        </div>
+
+                        <div class="form-group" style="width: 100%; margin-top: 15px;">
+                            <input type="submit" name="frmUploadDataSubmit" class="btn btn-lg btn-primary btn-block" value="Upload">
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <?php if (isset($aPatient->excel_filename) && !empty($aPatient->excel_filename)){
+                    ?>
+                    <hr/>
+                    <h4>Download Data</h4>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-10  col-md-offset-1">
+
+                            <?php
+                            echo form_open_multipart('download');?>
+
+                            <div class="form-group" style="width: 100%; margin-top: 15px;">
+                                <input type="hidden" name="frmDownloadDataEAD" class="btn btn-lg btn-primary btn-block" value="<?php echo $aPatient->ead; ?>">
+
+                                <input type="submit" name="frmUploadDataSubmit" class="btn btn-lg btn-primary btn-block" value="Download">
+                            </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

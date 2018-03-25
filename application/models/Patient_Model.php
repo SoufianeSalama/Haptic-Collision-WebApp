@@ -242,4 +242,135 @@ class Patient_Model extends CI_Model
         }
         return true;
     }
+
+    public function addRadiographAnalyzeData($oRadiographAnalyze){
+        //Check if there is already data of this patient in database
+        $sql = "SELECT * FROM radiograph_analyze WHERE patient_ead = ?";
+        try{
+            $aResult = $this->db->query($sql, array($oRadiographAnalyze->ead));
+            if ( isset($aResult->result()[0]) && !empty($aResult->result()) ){
+                // Already data of this patient in database
+                $sql = "UPDATE radiograph_analyze SET
+                  i1u_nf = ?,	i1i_mp = ?,	6u_nf  = ?,	6l_mp = ?,	ans_pns = ?,	n_ans = ?,	ans_gn = ?,	ar_go_1  = ?,	go_pog = ?,	ar_pt = ?,	pt_n = ?,	n_s = ?,	s_ar = ?,	ar_go_2 = ?,	go_me = ?,
+                  overjet = ?,	overbite = ?,	go_me_n_s = ?,	s_go_n_me = ?,	ufh_lfh = ?,	ns_pog = ?,	gl_gl  = ?,	a_sn = ?,	ls1u_ls = ?,	li1l_li = ?,	b_sm = ?,
+                  pog_pog = ?,	gl_sn = ?,	sn_me = ?,	sn_sto = ?,	sto_me = ?,	lll = ?,	interlab = ?,	cl = ?,	gl_sn_sn_me = ?,	sn_sto_sto_me = ?,	s_go = ?,	n_me = ?,	pns_n = ?,
+                  n_a = ?,	n_b = ?,	n_pog = ?,	b_pogmp = ?,	1u_npog = ?,	1u_apog = ?,	1l_npog = ?,	ls_nspog = ?,	li_nspog = ?,	pog_gl_sn_sn12 = ?,
+                  sn_perp_ls = ?,	sn_perp_li = ?,	snperp_pog = ?,	wits = ?,	max1_nf = ?,	max1_sn = ?, upper_occ_pl_tv = ?,	max1_upper_occ_pl = ?,	mand1_lower_occ_pl = ?,
+                  mand1_mp = ?,	ii  = ?,	ar_go_me = ?,	sna = ?,	snb = ?,	anb = ?,	s_n_go_me = ?,	mp_hp = ?,	sp_p_t2me = ?,	s_n_pog = ?,	n_a_pog = ?,	gl_sn_pog = ?,	cotg_sn_ls = ?,	lct = ?
+                  WHERE patient_ead = ? ";
+
+                $this->db->query($sql, array(
+                    $oRadiographAnalyze->i_i1u_nf ,  $oRadiographAnalyze->i_i1i_mp ,
+                    $oRadiographAnalyze->i_6u_nf , $oRadiographAnalyze->d_6l_mp ,
+                    $oRadiographAnalyze->d_ans_pns, $oRadiographAnalyze->d_n_ans ,
+                    $oRadiographAnalyze->d_ans_gn,$oRadiographAnalyze->d_ar_go_1 ,
+                    $oRadiographAnalyze->d_go_pog , $oRadiographAnalyze->d_ar_pt ,
+                    $oRadiographAnalyze->d_pt_n , $oRadiographAnalyze->d_n_s ,
+                    $oRadiographAnalyze->d_s_ar , $oRadiographAnalyze->d_ar_go_2,
+                    $oRadiographAnalyze->d_go_me , $oRadiographAnalyze->d_overjet ,
+                    $oRadiographAnalyze->d_overbite,$oRadiographAnalyze->d_go_me_n_s ,
+                    $oRadiographAnalyze->d_s_go_n_me ,$oRadiographAnalyze->d_ufh_lfh,
+                    $oRadiographAnalyze->d_ns_pog,  $oRadiographAnalyze->d_gl_gl ,
+                    $oRadiographAnalyze->d_a_sn , $oRadiographAnalyze->d_ls1u_ls ,
+                    $oRadiographAnalyze->d_li1l_li,    $oRadiographAnalyze->d_b_sm ,
+                    $oRadiographAnalyze->d_pog_pog ,  $oRadiographAnalyze->d_gl_sn ,
+                    $oRadiographAnalyze->d_sn_me , $oRadiographAnalyze->d_sn_sto ,
+                    $oRadiographAnalyze->d_sto_me,  $oRadiographAnalyze->d_lll ,
+                    $oRadiographAnalyze->d_interlab , $oRadiographAnalyze->d_cl ,
+                    $oRadiographAnalyze->d_gl_sn_sn_me ,  $oRadiographAnalyze->d_sn_sto_sto_me ,
+                    $oRadiographAnalyze->d_s_go ,$oRadiographAnalyze->d_n_me ,
+                    $oRadiographAnalyze->d_pns_n,   $oRadiographAnalyze->d_n_a ,
+                    $oRadiographAnalyze->d_n_b ,     $oRadiographAnalyze->d_n_pog ,
+                    $oRadiographAnalyze->d_b_pogmp ,   $oRadiographAnalyze->d_1u_npog ,
+                    $oRadiographAnalyze->d_1u_apog ,  $oRadiographAnalyze->d_1l_npog ,
+                    $oRadiographAnalyze->d_ls_nspog ,   $oRadiographAnalyze->d_li_nspog,
+                    $oRadiographAnalyze->d_pog_gl_sn_sn12,   $oRadiographAnalyze->d_sn_perp_ls ,
+                    $oRadiographAnalyze->d_sn_perp_li,   $oRadiographAnalyze->d_snperp_pog,
+                    $oRadiographAnalyze->d_wits ,   $oRadiographAnalyze->d_max1_nf ,
+                    $oRadiographAnalyze->d_max1_sn ,    $oRadiographAnalyze->d_upper_occ_pl_tv ,
+                    $oRadiographAnalyze->d_max1_upper_occ_pl ,  $oRadiographAnalyze->d_mand1_lower_occ_pl,
+                    $oRadiographAnalyze->d_mand1_mp,  $oRadiographAnalyze->d_ii ,
+                    $oRadiographAnalyze->d_ar_go_me,     $oRadiographAnalyze->d_sna ,
+                    $oRadiographAnalyze->d_snb ,    $oRadiographAnalyze->d_anb ,
+                    $oRadiographAnalyze->d_s_n_go_me, $oRadiographAnalyze->d_mp_hp,
+                    $oRadiographAnalyze->d_sp_p_t2me,   $oRadiographAnalyze->d_s_n_pog ,
+                    $oRadiographAnalyze->d_n_a_pog ,$oRadiographAnalyze->d_gl_sn_pog,
+                    $oRadiographAnalyze->d_cotg_sn_ls ,$oRadiographAnalyze->d_lct,
+                    $oRadiographAnalyze->ead
+                ));
+            }
+            else{
+                // No data of this patient in database
+                $sql = "Insert into radiograph_analyze (
+                  patient_ead,i1u_nf,	i1i_mp,	6u_nf,	6l_mp,	ans_pns,	n_ans,	ans_gn,	ar_go_1,	go_pog,	ar_pt,	pt_n,	n_s,	s_ar,	ar_go_2,	go_me,
+                  overjet,	overbite,	go_me_n_s,	s_go_n_me,	ufh_lfh,	ns_pog,	gl_gl,	a_sn,	ls1u_ls,	li1l_li,	b_sm,
+                  pog_pog,	gl_sn,	sn_me,	sn_sto,	sto_me,	lll,	interlab,	cl,	gl_sn_sn_me,	sn_sto_sto_me,	s_go,	n_me,	pns_n,
+                  n_a,	n_b,	n_pog,	b_pogmp,	1u_npog,	1u_apog,	1l_npog,	ls_nspog,	li_nspog,	pog_gl_sn_sn12,
+                  sn_perp_ls,	sn_perp_li,	snperp_pog,	wits,	max1_nf,	max1_sn, upper_occ_pl_tv,	max1_upper_occ_pl,	mand1_lower_occ_pl,
+                  mand1_mp,	ii,	ar_go_me,	sna,	snb,	anb,	s_n_go_me,	mp_hp,	sp_p_t2me,	s_n_pog,	n_a_pog,	gl_sn_pog,	cotg_sn_ls,	lct) 
+                   VALUES (
+                   ?, ?, ? , ? , ? ,?, ? , ? , ? ,?, ?, ?, ? , ? , ? ,?,
+                   ? ,? ,? , ?,  ?, ?, ? , ? , ? ,?, ? , 
+                   ? ,? ,?,  ?,  ?, ? ,? , ? , ?, ? ,? , ? ,?,
+                   ?, ?, ? , ? , ? ,?, ? , ? , ?, ?,
+                   ?, ?, ? , ? , ? ,?, ? , ? , ?,
+                   ?, ?, ? , ? , ? ,?, ? , ? , ? ,? ,?, ?, ? ,?                  
+                   )";
+
+                $this->db->query($sql, array(
+                    $oRadiographAnalyze->ead,
+                    $oRadiographAnalyze->i_i1u_nf ,  $oRadiographAnalyze->i_i1i_mp ,
+                    $oRadiographAnalyze->i_6u_nf , $oRadiographAnalyze->d_6l_mp ,
+                    $oRadiographAnalyze->d_ans_pns, $oRadiographAnalyze->d_n_ans ,
+                    $oRadiographAnalyze->d_ans_gn,$oRadiographAnalyze->d_ar_go_1 ,
+                    $oRadiographAnalyze->d_go_pog , $oRadiographAnalyze->d_ar_pt ,
+                    $oRadiographAnalyze->d_pt_n , $oRadiographAnalyze->d_n_s ,
+                    $oRadiographAnalyze->d_s_ar , $oRadiographAnalyze->d_ar_go_2,
+                    $oRadiographAnalyze->d_go_me , $oRadiographAnalyze->d_overjet ,
+                    $oRadiographAnalyze->d_overbite,$oRadiographAnalyze->d_go_me_n_s ,
+                    $oRadiographAnalyze->d_s_go_n_me ,$oRadiographAnalyze->d_ufh_lfh,
+                    $oRadiographAnalyze->d_ns_pog,  $oRadiographAnalyze->d_gl_gl ,
+                    $oRadiographAnalyze->d_a_sn , $oRadiographAnalyze->d_ls1u_ls ,
+                    $oRadiographAnalyze->d_li1l_li,    $oRadiographAnalyze->d_b_sm ,
+                    $oRadiographAnalyze->d_pog_pog ,  $oRadiographAnalyze->d_gl_sn ,
+                    $oRadiographAnalyze->d_sn_me , $oRadiographAnalyze->d_sn_sto ,
+                    $oRadiographAnalyze->d_sto_me,  $oRadiographAnalyze->d_lll ,
+                    $oRadiographAnalyze->d_interlab , $oRadiographAnalyze->d_cl ,
+                    $oRadiographAnalyze->d_gl_sn_sn_me ,  $oRadiographAnalyze->d_sn_sto_sto_me ,
+                    $oRadiographAnalyze->d_s_go ,$oRadiographAnalyze->d_n_me ,
+                    $oRadiographAnalyze->d_pns_n,   $oRadiographAnalyze->d_n_a ,
+                    $oRadiographAnalyze->d_n_b ,     $oRadiographAnalyze->d_n_pog ,
+                    $oRadiographAnalyze->d_b_pogmp ,   $oRadiographAnalyze->d_1u_npog ,
+                    $oRadiographAnalyze->d_1u_apog ,  $oRadiographAnalyze->d_1l_npog ,
+                    $oRadiographAnalyze->d_ls_nspog ,   $oRadiographAnalyze->d_li_nspog,
+                    $oRadiographAnalyze->d_pog_gl_sn_sn12,   $oRadiographAnalyze->d_sn_perp_ls ,
+                    $oRadiographAnalyze->d_sn_perp_li,   $oRadiographAnalyze->d_snperp_pog,
+                    $oRadiographAnalyze->d_wits ,   $oRadiographAnalyze->d_max1_nf ,
+                    $oRadiographAnalyze->d_max1_sn ,    $oRadiographAnalyze->d_upper_occ_pl_tv ,
+                    $oRadiographAnalyze->d_max1_upper_occ_pl ,  $oRadiographAnalyze->d_mand1_lower_occ_pl,
+                    $oRadiographAnalyze->d_mand1_mp,  $oRadiographAnalyze->d_ii ,
+                    $oRadiographAnalyze->d_ar_go_me,     $oRadiographAnalyze->d_sna ,
+                    $oRadiographAnalyze->d_snb ,    $oRadiographAnalyze->d_anb ,
+                    $oRadiographAnalyze->d_s_n_go_me, $oRadiographAnalyze->d_mp_hp,
+                    $oRadiographAnalyze->d_sp_p_t2me,   $oRadiographAnalyze->d_s_n_pog ,
+                    $oRadiographAnalyze->d_n_a_pog ,$oRadiographAnalyze->d_gl_sn_pog,
+                    $oRadiographAnalyze->d_cotg_sn_ls ,$oRadiographAnalyze->d_lct
+                ));
+            }
+        }
+        catch (Exception $e){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Update the patients row in DB with filename of the uploaded excel file
+     * @param $sPatientEAD EAD of patient
+     * @param $sFileName Filename of the uploaded Excel File
+     */
+    public function saveFileName($sPatientEAD, $sFileName){
+        $sql = "UPDATE patients SET excel_filename = ? WHERE ead = ? ";
+        $this->db->query($sql, array($sFileName,$sPatientEAD ));
+    }
 }

@@ -60,5 +60,5 @@ $route["password"] = "welcome/passwordForgotView";
 
 // APPLICATION
 $route["mypatients"] = "application/myPatientsView";
-$route["patient"] = "application/patientProfileView";
+$route["patient/(:any)"] = "application/patientProfileView/$1";
 $route["users"] = "application/userSettingsView";

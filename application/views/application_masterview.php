@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="./mypatients">Haptic Collision</a>
+            <a class="navbar-brand" href="<?php echo base_url(); ?>mypatients">Haptic Collision</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#homeNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -28,14 +28,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
         <div class="collapse navbar-collapse" id="homeNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="./mypatients">My Patients</a></li>
+                <li><a href="<?php echo base_url(); ?>mypatients">My Patients</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Settings
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li><a href="./users">Users</a></li>
+                        <li><a href="<?php echo base_url(); ?>users"">Users</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

@@ -31,23 +31,40 @@
                                 <th>Last Name</th>
                                 <th>Gender</th>
                                 <th>Age</th>
-                                <th>Radiograph Analyse data</th>
-                                <th>Clinical Measurments data</th>
+                                <th>Excel file</th>
+
+                                <!--<th>Radiograph Analyse data</th>
+                                <th>Clinical Measurments data</th>-->
                                 <th>Options</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>123456789</td>
-                                <td>Soufiane</td>
-                                <td>Salama</td>
-                                <td>m</td>
-                                <td>21</td>
-                                <td>Not Available</td>
-                                <td>Available</td>
-                                <td>Options</td>
-                            </tr>
 
+                        <tbody>
+                        <?php
+
+                        foreach ($aMyPatients as $p){
+                            echo "<tr>";
+                            echo "<td>" . $p->ead . "</td>";
+                            echo "<td>" . $p->firstname . "</td>";
+                            echo "<td>" . $p->lastname. "</td>";
+                            echo "<td>" . $p->age . "</td>";
+                            echo "<td>" . $p->gender . "</td>";
+                            if (isset($p->excel_filename)){
+                                echo "<td>Available</td>";
+                            }else{
+                                echo "<td>Not Available</td>";
+                            }
+                            /*echo '<td>'. form_open('patient') .
+                                '<input type="hidden" name="frmShowPatientEAD" value='. $p->ead . ' />
+                                    <input class="btn btn-info" type="submit" value="View" />
+                                </form>
+                            </td>';*/
+                            echo ' <td><a href="./patient/'.$p->ead.'" class="btn btn-primary active">View</a> </td>';
+
+                            echo "</tr>";
+                        }
+
+                        ?>
                         </tbody>
 
                     </table>

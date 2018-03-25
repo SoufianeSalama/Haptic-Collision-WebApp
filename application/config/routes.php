@@ -58,7 +58,10 @@ $route["login"] = "welcome";
 $route["register"] = "welcome/registerView";
 $route["password"] = "welcome/passwordForgotView";
 
-// APPLICATION
+// APPLICATION VIEWS
 $route["mypatients"] = "application/myPatientsView";
 $route["patient/(:any)"] = "application/patientProfileView/$1";
 $route["users"] = "application/userSettingsView";
+
+// APPLICATION FORMS
+$route["clinicalmeasdata"] = "application/clinicalMeasDataForm";

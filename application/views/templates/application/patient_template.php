@@ -1,3 +1,15 @@
+<?php
+if (isset($bAlert) && !empty($bAlert)){
+    if ($bAlert){
+        echo '<div class="row">
+                <div class="col-md-12 alert alert-success alert-dismissable">
+                    <strong>Success!</strong> Data is added/modified.
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                </div>
+            </div>';
+    }
+}
+?>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -499,3 +511,561 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Modify/Add Clinical Measurements Data (WIZARD)-->
+<div id="modalClinicalMeas" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Clinical Measurements</h4>
+            </div>
+            <div class="modal-body">
+                <?php echo form_open('clinicalmeasdata'); ?>
+                <input type="hidden" name="frmClinicalData_ead" class="form-control" value="<?php echo $aPatient->ead; ?>" >
+
+                <div id="step1">
+                    <h3 style="margin-top: 5px;">Step 1/6</h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>ICW (mm):</label>
+                                <input type="number" name="frmClinicalData_icw" class="form-control" value="<?php echo $aPatient->icw; ?>" >
+                            </div>
+                            <div class="form-group">
+                                <label>NAW outer (mm):</label>
+                                <input type="number" name="frmClinicalData_naw_outer" class="form-control" value="<?php echo $aPatient->naw_outer ; ?>" >
+                            </div>
+                            <div class="form-group">
+                                <label>NAW inner (mm):</label>
+                                <input type="number" name="frmClinicalData_naw_inner" class="form-control" value="<?php echo $aPatient->naw_inner  ?>" >
+                            </div>
+                            <div class="form-group">
+                                <label>Upper lip length including lip red (mm):</label>
+                                <input type="number" name="frmClinicalData_upper_lip_length_inc" class="form-control" value="<?php echo $aPatient->upper_lip_length_inc ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Upper lip length excluding lip red (mm):</label>
+                                <input type="number" name="frmClinicalData_upper_lip_length_exc" class="form-control" value="<?php echo $aPatient->upper_lip_length_exc; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Lip-to-incisor at rest (mm):</label>
+                                <input type="number" name="frmClinicalData_lip_to_incisor_rest" class="form-control" value="<?php echo $aPatient->lip_to_incisor_rest ; ?>">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Lip-to-incisor smile (mm):</label>
+                                <input type="text" name="frmClinicalData_lip_to_incisor_smile" class="form-control" value="<?php echo $aPatient->lip_to_incisor_smile ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Crown length llsd (mm):</label>
+                                <input type="text" name="frmClinicalData_crown_length_llsd" class="form-control" value="<?php echo $aPatient->crown_length_llsd; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Overjet (mm):</label>
+                                <input type="text" name="frmClinicalData_overjet" class="form-control" value="<?php echo $aPatient->overjet ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Overbite (mm):</label>
+                                <input type="text" name="frmClinicalData_overbite" class="form-control" value="<?php echo $aPatient->overbite ; ?>" >
+                            </div>
+                            <div class="form-group">
+                                <label>Freeway-space (mm):</label>
+                                <input type="text" name="frmClinicalData_freeway_space" class="form-control" value="<?php echo $aPatient->freeway_space ; ?>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!--<input type="button" class="btn btn-lg btn-primary btn-block" value="Previous"  />-->
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Next" id="frmClinicalDataStep1Next" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step2">
+                    <h3 style="margin-top: 5px;">Step 2/6</h3>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Dental OK (mm):</label>
+                                <input type="number" name="frmClinicalData_dental_ok" class="form-control" value="<?php echo $aPatient->dental_ok  ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Skeletal OK (mm):</label>
+                                <input type="number" name="frmClinicalData_skeletal_ok" class="form-control" value="<?php echo $aPatient->skeletal_ok  ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Dental BK (mm):</label>
+                                <input type="number" name="frmClinicalData_dental_bk" class="form-control" value="<?php echo $aPatient->dental_bk ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Skeletal BK (mm):</label>
+                                <input type="number" name="frmClinicalData_skeletal_bk" class="form-control" value="<?php echo $aPatient->skeletal_bk  ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Deviation midline chin (mm):</label>
+                                <input type="number" name="frmClinicalData_deviation_midline_chin" class="form-control" value="<?php echo $aPatient->deviation_midline_chin  ; ?>" >
+                            </div>
+                            <div class="form-group">
+                                <label>Fullness lips (thin/normal/full):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="thin">Thin</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="normal">Normal</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="full">Full</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Interlabial gap  (mm):</label>
+                                <input type="number" name="frmClinicalData_interlabial_gap" class="form-control"  value="<?php echo $aPatient->interlabial_gap   ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Gummy smile front (mm):</label>
+                                <input type="number" name="frmClinicalData_gummy_smile_front" class="form-control" value="<?php echo $aPatient->gummy_smile_front   ; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Gummy smile posterieur (yes/no):</label>
+
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_gummy_smile_posterieur" value="1" <?php if($aPatient->gummy_smile_posterieur =='1'){ echo "checked";}; ?>>Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_gummy_smile_posterieur" value="0" <?php if($aPatient->gummy_smile_posterieur =='0'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Lip incompetence (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_lip_incompetence" value="1" <?php if($aPatient->lip_incompetence  =='1'){ echo "checked";}; ?> >Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_lip_incompetence" value="0" <?php if($aPatient->lip_incompetence  =='0'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Curling out lower lip  (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_curling_out_lower_lip" value="1" <?php if($aPatient->curling_out_lower_lip   =='1'){ echo "checked";}; ?>>Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_curling_out_lower_lip" value="0" <?php if($aPatient->curling_out_lower_lip   =='0'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep2Previous" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Next" id="frmClinicalDataStep2Next" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step3">
+                    <h3 style="margin-top: 5px;">Step 3/6</h3>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label >Liptrap (lying back/normal/reversed):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="lying_back" >Lying back</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="normal">Normal</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="reversed">Reversed</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Indentations on lower lip (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_indentations_on_lower_lip" value="1" <?php if($aPatient->indentations_on_lower_lip=='1'){ echo "checked";}; ?> >Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_indentations_on_lower_lip" value="0" <?php if($aPatient->indentations_on_lower_lip=='0'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Indentations in palatum (deck bite) (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_indentations_in_palatum" value="1" <?php if($aPatient->indentations_in_palatum=='1'){ echo "checked";}; ?>>Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_indentations_in_palatum" value="0" <?php if($aPatient->indentations_in_palatum=='0'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Buccal corridor (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_buccal_corridor" value="1" <?php if($aPatient->buccal_corridor=='1'){ echo "checked";}; ?>>Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_buccal_corridor" value="0" <?php if($aPatient->buccal_corridor=='0'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Nose description (snub/straight/hump):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="snub_nose" >Snub</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="straight">Straight</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="hump">Hump</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label >Nasolabial angle (stub/sharp/straight):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="stub" >Stub</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="sharp">Sharp</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="straight">Straight</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label >Oribtae (normal/lying back/..):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_oribtae" value="normal">Normal</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_oribtae" value="lying_back">Lying back</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Zygomata (normal/lying back/..):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_zygomata" value="normal">Normal</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_zygomata" value="lying_back">Lying back</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Pommette (red/not divergent/divergent):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_pommette" value="red">Red</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_pommette" value="not_divergent">Not divergent</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_pommette" value="divergent">Divergent</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Paranasal fossa (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="normal">Normal</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="lying_back">Lying back</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="flattened">Flattened</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label >Chin fold (normal/distinct/flattened):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="normal">Normal</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="distinct">Distinct</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="flattened">Flattened</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep3Previous" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Next" id="frmClinicalDataStep3Next" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step4">
+                    <h3 style="margin-top: 5px;">Step 4/6</h3>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Mentalisstrain (yes/no):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_mentalis_strain" value="1" <?php if($aPatient->mentalis_strain =='1'){ echo "checked";}; ?>>Yes</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_mentalis_strain" value="0" <?php if($aPatient->mentalis_strain =='0'){ echo "checked";}; ?> >No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Chin height (mm):</label>
+                                <input type="number" name="frmClinicalData_chin_height" class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Chin neck distance (mm):</label>
+                                <input type="number" name="frmClinicalData_chin_neck_distance" class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Chin neck transition (straight/blunt):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_chin_neck_transition" value="straight">Straight</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_chin_neck_transition" value="blunt">Blunt</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Transverse ratio:</label>
+                                <div class="radio">
+                                    <input type="text" name="frmClinicalData_transverse_relation" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label>Face length ratio(.../.../...):</label>
+                                <input type="text" name="frmClinicalData_face_length_ratio" class="form-control" placeholder=".../.../..." >
+                            </div>
+                            <div class="form-group">
+                                <label >Profile (straight/convex/cancave):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_profile" value="straight">Straight</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_profile" value="convex">Convex</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_profile" value="concave">Concave</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep4Previous" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Next" id="frmClinicalDataStep4Next" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="step5">
+                    <h3 style="margin-top: 5px;">Step 5/6</h3>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Maxilla-advancement (mm):</label>
+                                <input type="number" name="frmClinicalData_maxilla_advancement" class="form-control" value="<?php echo $aPatient->maxilla_advancement  ; ?>" >
+                            </div>
+                            <div class="form-group">
+                                <label>Pieces (1/3):</label>
+                                <div class="radio">
+                                   <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="1">1 piece</label>
+                                </div>
+                                <div class="radio">
+                                   <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="2">2 pieces</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="3">3 pieces</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="no">No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Anterior (intrusion/extrusion):</label>
+                                <!--<div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_maxilla_anterior" value="intrusion">Intrusion</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_maxilla_anterior" value="extrusion">Extrusion</label>
+                                </div>-->
+                                <input type="text" name="frmClinicalData_maxilla_anterior" class="form-control" value="<?php echo $aPatient->maxilla_anterior  ; ?>" placeholder="extrusion 3 mm">
+                            </div>
+                            <div class="form-group">
+                                <label>Posterior (intrusion/extrusion):</label>
+                                <!--<div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_maxilla_posterior" value="intrusion">Intrusion</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_maxilla_posterior" value="extrusion">Extrusion</label>
+                                </div>-->
+                                <input type="text" name="frmClinicalData_maxilla_posterior" class="form-control" value="<?php echo $aPatient->maxilla_posterior   ; ?>" placeholder="extrusion 3 mm">
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Midline rotation (no/rotation to...):</label>
+                                <input type="text" name="frmClinicalData_maxilla_midline_rotation" class="form-control" value="<?php echo $aPatient->maxilla_midline_rotation    ; ?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Mandible-advancement/setback (advancement/setback):</label>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_mandible_advancement_setback" value="advancement" <?php if($aPatient->gummy_smile_posterieur =='advancement'){ echo "checked";}; ?>>Advancement</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_mandible_advancement_setback" value="setback" <?php if($aPatient->gummy_smile_posterieur =='setback'){ echo "checked";}; ?>>Setback</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="frmClinicalData_mandible_advancement_setback" value="no" <?php if($aPatient->gummy_smile_posterieur =='no'){ echo "checked";}; ?>>No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Chin-advancement/setback (mm):</label>
+                                <input type="number" name="frmClinicalData_chin_advancement" class="form-control" value="<?php echo $aPatient->chin_advancement; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Chin-intrusion/extrusion:</label>
+                                <input type="number" name="frmClinicalData_chin_intrusion_extrusion" class="form-control" value="<?php echo $aPatient->chin_intrusion_extrusion; ?>" placeholder="extrusion 3 mm">>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep5Previous" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Next" id="frmClinicalDataStep5Next" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="step6">
+                    <h3 style="margin-top: 5px;">Step 6/6</h3>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Notes:</label>
+                                <textarea name="frmClinicalData_notes" class="form-control" style="resize:none;height:100px;"><?php echo $aPatient->notes; ?></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep6Previous" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit" id="frmClinicalDataStep6Submit" />
+                        </div>
+                    </div>
+
+
+                </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Clinical Measurements Data Modal (WIZARD)-->
+<script>
+    $(document).ready(function(){
+        $("#step2").hide();
+        $("#step3").hide();
+        $("#step4").hide();
+        $("#step5").hide();
+        $("#step6").hide();
+
+        $("#frmClinicalDataStep1Next").click(function(){
+            $("#step1").hide();
+            $("#step2").show();
+        });
+
+        $("#frmClinicalDataStep2Previous").click(function(){
+            $("#step1").show();
+            $("#step2").hide();
+        });
+
+        $("#frmClinicalDataStep2Next").click(function(){
+            $("#step2").hide();
+            $("#step3").show();
+        });
+
+        $("#frmClinicalDataStep3Previous").click(function(){
+            $("#step2").show();
+            $("#step3").hide();
+        });
+
+        $("#frmClinicalDataStep3Next").click(function(){
+            $("#step3").hide();
+            $("#step4").show();
+        });
+
+        $("#frmClinicalDataStep4Previous").click(function(){
+            $("#step3").show();
+            $("#step4").hide();
+        });
+
+        $("#frmClinicalDataStep4Next").click(function(){
+            $("#step4").hide();
+            $("#step5").show();
+        });
+
+        $("#frmClinicalDataStep5Previous").click(function(){
+            $("#step4").show();
+            $("#step5").hide();
+        });
+
+        $("#frmClinicalDataStep5Next").click(function(){
+            $("#step5").hide();
+            $("#step6").show();
+        });
+
+        $("#frmClinicalDataStep6Previous").click(function(){
+            $("#step6").hide();
+            $("#step5").show();
+        });
+
+    });
+</script>
+

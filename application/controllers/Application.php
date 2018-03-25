@@ -3,21 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Application extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function index()
 	{
 		$this->myPatientsView();
@@ -42,16 +27,18 @@ class Application extends CI_Controller {
         $this->showView($sTemplateHome, "My Patients");
     }
 
-    public function patientProfileView($sPatientEAD){
+    public function patientProfileView($sPatientEAD, $bSucces = null){
         $this->load->model('Patient_Model');
         $aResult = $this->Patient_Model->getPatient($sPatientEAD);
 
         $aData = array();
+        $aData["bAlert"] = $bSucces;
+
         if (empty($aResult->result())){
         //if ($aPatient == null){
             $aData["heading"] = "Haptic Collision Webapplication ERROR: Patient not found!";
             $aData["message"] = "";
-            $sTemplateHome = $this->load->view('errors/html/error_general', $aData);
+            $this->load->view('errors/html/error_general', $aData);
         }else{
             $aData["aPatient"] = $aResult->result()[0];
             $sTemplateHome = $this->load->view('templates/application/patient_template', $aData, true);
@@ -64,5 +51,18 @@ class Application extends CI_Controller {
         $aData = array();
         $sTemplateHome = $this->load->view('templates/application/users_template', $aData, true);
         $this->showView($sTemplateHome, "Users Settings");
+    }
+
+    public function clinicalMeasDataForm(){
+        $this->load->model('Patient_Model');
+        if ($this->Patient_Model->clinicalMeasurementsDataFormVal()){
+            $this->patientProfileView($this->input->post('frmClinicalData_ead'), true);
+        }
+        else{
+            $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with modifying Clinical Measurements data!";
+            $aData["message"] = "";
+            $this->load->view('errors/html/error_general', $aData);
+        }
+
     }
 }

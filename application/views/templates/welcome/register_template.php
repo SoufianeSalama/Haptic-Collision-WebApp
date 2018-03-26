@@ -11,6 +11,10 @@
                 <?php echo form_open('frmregister'); ?>
 
                 <div class="col-sm-12 col-md-10  col-md-offset-1 ">
+                    <?php echo validation_errors('<div class="row"><div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>', '</div></div>'); ?>
+
+                    <br />
+
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <input type="text" name="frmRegisterFirstName" class="form-control" placeholder="First name" value="<?php echo set_value('frmRegisterFirstName'); ?>" >
                     </div>
@@ -55,9 +59,6 @@
                         <input type="password" name="frmRegisterConfirmPassword" class="form-control" placeholder="Confirm password" value="<?php echo set_value('frmRegisterConfirmPassword'); ?>" >
                     </div>
 
-                    <br>
-
-                    <?php echo validation_errors('<div class="row"><div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>', '</div></div>'); ?>
 
                     <div class="form-group">
                         <input name="frmRegisterSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Create account">

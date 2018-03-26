@@ -53,10 +53,13 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-// WELCOME
+// WELCOME VIEWS
 $route["login"] = "welcome";
 $route["register"] = "welcome/registerView";
 $route["password"] = "welcome/passwordForgotView";
+
+// WELCOME FORMS
+$route["frmregister"] = "welcome/registerUserForm";
 
 // APPLICATION VIEWS
 $route["mypatients"] = "application/myPatientsView";
@@ -65,7 +68,12 @@ $route["users"] = "application/userSettingsView";
 
 // APPLICATION FORMS
 $route["clinicalmeasdata"] = "application/clinicalMeasDataForm";
+$route['newpatient'] = "application/newPatientForm";
 
 // APPLICATION UPLOAD DATA
 $route["upload"] = "application/radiographAnalyzeData";
+
+
+// Test
+$route["test"] = "application/setBirthday";
 

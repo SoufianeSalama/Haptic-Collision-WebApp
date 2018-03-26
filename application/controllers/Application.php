@@ -16,13 +16,13 @@ class Application extends CI_Controller {
         $this->load->view('application_masterview', $aData);
     }
 
-    public function myPatientsView(){
+    public function myPatientsView($bSucces=null){
         $iDocterId = 1;
         $this->load->model('Patient_Model');
         $aResult = $this->Patient_Model->getMyPatients($iDocterId);
         $aData = array();
         $aData["aMyPatients"] = $aResult->result();
-
+        $aData["bAlert"] = $bSucces;
         $sTemplateHome = $this->load->view('templates/application/mypatients_template', $aData, true);
         $this->showView($sTemplateHome, "My Patients");
     }
@@ -114,4 +114,59 @@ class Application extends CI_Controller {
         }
 
     }
+
+    public function newPatientForm(){
+        $iDocter_id = 1;
+
+        $this->form_validation->set_rules('frmNewPatientEAD', 'Patient EAD', 'required|callback_patientead_check');
+
+        $this->form_validation->set_rules('frmNewPatientFirstName', 'Patient Firstname', 'required',
+            array('required' => 'You must provide a %s.')
+        );
+        $this->form_validation->set_rules('frmNewPatientLastName', 'Patient Lastname', 'required',
+            array('required' => 'You must provide a %s.')
+        );
+        $this->form_validation->set_rules('frmNewPatientBirthdate', 'Patient Birthdate', 'required',
+            array('required' => 'You must provide a %s.')
+        );
+        $this->form_validation->set_rules('frmNewPatientGender', 'Patient Gender', 'required',
+            array('required' => 'You must provide a %s.')
+        );
+
+        if ($this->form_validation->run() == FALSE)
+        {
+            return false;
+        }
+        else
+        {
+            // Add new patient
+            $aPatient = array(
+                "ead" => $this->input->post('frmNewPatientEAD'),
+                "firstname" => strtoupper($this->input->post('frmNewPatientFirstName')),
+                "lastname" => strtoupper ($this->input->post('frmNewPatientLastName')),
+                "birtdate" => $this->input->post('frmNewPatientBirthdate'),
+                "gender" => $this->input->post('frmNewPatientGender'),
+            );
+            $this->load->model('Patient_Model');
+            if ($this->Patient_Model->newPatient($aPatient, $iDocter_id)){
+                $this->myPatientsView(true);
+            }else{
+                $aData["heading"] = "Haptic Collision Webapplication ERROR: Patient is not added!";
+                $aData["message"] = "10";
+                $this->load->view('errors/html/error_general', $aData);
+            }
+            return true;
+        }
+    }
+
+    /**
+     * Checks if there is already a patients with this EAD
+     * @param $sEad EAD of patient
+     * @return bool true/false
+     */
+    public function patientead_check($sEad){
+        $this->load->model('Patient_Model');
+        return $this->Patient_Model->newPatientCheckEad($sEad);
+    }
+
 }

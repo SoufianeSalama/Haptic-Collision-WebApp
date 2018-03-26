@@ -48,7 +48,15 @@ if (isset($bAlert) && !empty($bAlert)){
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Age:</td>
-                            <td><?php echo $aPatient->age; ?></td>
+                            <td><?php
+                                $dateTime = new DateTime( $aPatient->birthdate);
+                                if ( empty($dateTime->format('Y'))){
+                                    $iAge="unknown";
+                                }
+                                else{
+                                    $iAge = date("Y") - $dateTime->format('Y') - 1;
+                                }
+                                echo "<td>" . $iAge . "</td>"; ?></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Notes:</td>

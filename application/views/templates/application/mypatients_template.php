@@ -5,6 +5,18 @@
                 </div>
                </div>'); ?>
 
+<?php
+if (isset($bAlert) && !empty($bAlert)){
+    if ($bAlert){
+        echo '<div class="row">
+                <div class="col-md-12 alert alert-success alert-dismissable">
+                    <strong>Success!</strong> New Patient is added.
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                </div>
+            </div>';
+    }
+}
+?>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -47,8 +59,16 @@
                             echo "<td>" . $p->ead . "</td>";
                             echo "<td>" . $p->firstname . "</td>";
                             echo "<td>" . $p->lastname. "</td>";
-                            echo "<td>" . $p->age . "</td>";
                             echo "<td>" . $p->gender . "</td>";
+
+                            $dateTime = new DateTime( $p->birthdate);
+                            if ( empty($dateTime->format('Y'))){
+                                $iAge="unknown";
+                            }
+                            else{
+                                $iAge = date("Y") - $dateTime->format('Y') - 1;
+                            }
+                            echo "<td>" . $iAge . "</td>";
                             if (isset($p->excel_filename)){
                                 echo "<td>Available</td>";
                             }else{
@@ -122,7 +142,7 @@
 
                     <div class="col-sm-12 col-md-10  col-md-offset-1 ">
                         <div class="form-group" style="width: 100%; margin-top: 15px;">
-                            <input type="number" name="frmNewPatientEAD" class="form-control" placeholder="EAD number" value="<?php echo set_value('frmNewPatientEAD'); ?>" required>
+                            <input type="text" name="frmNewPatientEAD" class="form-control" placeholder="EAD number" value="<?php echo set_value('frmNewPatientEAD'); ?>" required>
                         </div>
 
                         <div class="form-group" style="width: 100%; margin-top: 15px;">
@@ -133,8 +153,12 @@
                             <input type="text" name="frmNewPatientLastName" class="form-control" placeholder="Last name" value="<?php echo set_value('frmNewPatientLastName'); ?>" required>
                         </div>
 
-                        <div class="form-group" style="width: 100%; margin-top: 15px;">
+                        <!--<div class="form-group" style="width: 100%; margin-top: 15px;">
                             <input type="number" name="frmNewPatientAge" class="form-control" placeholder="Age" value="<?php echo set_value('frmNewPatientAge'); ?>" required>
+                        </div>-->
+
+                        <div class="form-group" style="width: 100%; margin-top: 15px;">
+                            <input type="date" name="frmNewPatientBirthdate" class="form-control" value="<?php echo set_value('frmNewPatientBirthdate'); ?>" required>
                         </div>
 
                         <div class="form-group" style="width: 100%; margin-top: 15px;">

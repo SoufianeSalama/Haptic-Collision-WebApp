@@ -3,21 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function index()
 	{
 	    $this->loginView();
@@ -30,8 +15,9 @@ class Welcome extends CI_Controller {
         $this->load->view('welcome_masterview', $aData);
     }
 
-    public function loginView(){
+    public function loginView($bSucces = null){
         $aData = array();
+        $aData["bAlert"] = $bSucces;
         $sTemplateHome = $this->load->view('templates/welcome/login_template', $aData, true);
         $this->showView($sTemplateHome, "Login");
     }
@@ -46,5 +32,86 @@ class Welcome extends CI_Controller {
         $aData = array();
         $sTemplateHome = $this->load->view('templates/welcome/password_template', $aData, true);
         $this->showView($sTemplateHome, "Forgot password");
+    }
+
+    public function registerUserForm(){
+        // CALLBACKS not working in models
+        //$this->load->model("User_Model");
+        //$this->User_Model->registerFormVal();
+
+        $this->form_validation->set_rules('frmRegisterFirstName', 'Firstname', 'required|trim|alpha');
+        $this->form_validation->set_rules('frmRegisterLastName', 'Lastname', 'required|trim|alpha');
+        $this->form_validation->set_rules('frmRegisterEmail', 'Email', 'required|trim|valid_email|callback_email_check');
+        $this->form_validation->set_rules('frmRegisterFunction', 'Function', 'required|trim|alpha');
+        $this->form_validation->set_rules('frmRegisterWorkplace', 'Workplace', 'required|trim|alpha');
+        $this->form_validation->set_rules('frmRegisterCountry', 'Country', 'required|trim|alpha');
+        $this->form_validation->set_rules('frmRegisterPhone', 'Phone', 'required|trim|numeric');
+        $this->form_validation->set_rules('frmRegisterSurgicalExperience', 'Surgical experience', 'required|trim');
+        $this->form_validation->set_rules('frmRegisterPassword', 'Password', 'required|trim|matches[frmRegisterConfirmPassword]');
+        $this->form_validation->set_rules('frmRegisterConfirmPassword', '¨Password confirmation', 'required|trim');
+
+        $this->form_validation->set_rules('frmRegisterUsername', 'Username', 'required|trim|callback_username_check');
+
+        if ($this->form_validation->run() == FALSE)
+        {
+            $this->registerView();
+        }
+        else
+        {
+            $aUserData = array(
+                "firstname" => strtoupper($this->input->post('frmRegisterFirstName')),
+                "lastname" => strtoupper($this->input->post('frmRegisterLastName')),
+                "email" => $this->input->post('frmRegisterEmail'),
+                "function" => strtoupper($this->input->post('frmRegisterFunction')),
+                "workplace" => strtoupper($this->input->post('frmRegisterWorkplace')),
+                "country" => strtoupper($this->input->post('frmRegisterCountry')),
+                "phone" => $this->input->post('frmRegisterPhone'),
+                "surgical_experience" => $this->input->post('frmRegisterSurgicalExperience'),
+                "username" => $this->input->post('frmRegisterUsername'),
+                "password" => password_hash($this->input->post('frmRegisterPassword'), PASSWORD_DEFAULT ),
+                "userlevel" => 0,
+                "approved" => 0
+            );
+            $this->load->model("User_Model");
+
+            if ($this->User_Model->registerNewUser($aUserData)){
+                $this->loginView(true);
+            }else{
+                $this->registerView();
+            }
+        }
+    }
+
+    public function email_check($sEmail){
+        $this->load->model("User_Model");
+        $this->User_Model->registerEmailCheck($sEmail);
+
+        $sql = "SELECT * FROM docters WHERE email = ?";
+        $aResult = $this->db->query($sql, array($sEmail));
+        $aUsers = $aResult->result();
+        if ( isset($aUsers) && !empty($aUsers)){
+            // Already user with this email in database
+            $this->form_validation->set_message('email_check', '{field} error: Already used email');
+            return false;
+        }
+        else{ return true;}
+
+    }
+
+    public function username_check($sUsername){
+        $this->load->model("User_Model");
+        $this->User_Model->registerUsernameCheck($sUsername);
+
+        $sql = "SELECT * FROM docters WHERE username = ?";
+        $aResult = $this->db->query($sql, array($sUsername));
+        $aUsers = $aResult->result();
+
+        if ( isset($aUsers) && !empty($aUsers)){
+            // Already user with this email in database
+            $this->form_validation->set_message('username_check', '{field} error: Already used username');
+            return false;
+        }
+        else{ return true;}
+
     }
 }

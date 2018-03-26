@@ -373,4 +373,27 @@ class Patient_Model extends CI_Model
         $sql = "UPDATE patients SET excel_filename = ? WHERE ead = ? ";
         $this->db->query($sql, array($sFileName,$sPatientEAD ));
     }
+
+
+    public function newPatientCheckEad($sEad){
+        $sql = "SELECT * FROM patients WHERE 'EAD' = ?";
+        $aResult = $this->db->query($sql, array($sEad));
+        if (!empty($aResult->results)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public function newPatient($aPatient, $iDocter_id){
+        try {
+            $sql = "Insert into patients (ead, firstname, lastname, gender, birthdate, docter_id) VALUES (?, ?, ? , ? , ? ,?)";
+            $this->db->query($sql, array($aPatient["ead"], $aPatient["firstname"], $aPatient["lastname"], $aPatient["birtdate"], $aPatient["gender"], $iDocter_id));
+        }
+        catch(Exception $e){
+            return false;
+        }
+        return true;
+    }
 }

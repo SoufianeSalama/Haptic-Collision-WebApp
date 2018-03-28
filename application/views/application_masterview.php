@@ -29,15 +29,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="collapse navbar-collapse" id="homeNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="<?php echo base_url(); ?>mypatients">My Patients</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        Settings
-                    </a>
+                <?php
+                if ($this->session->userdata('userlevel')) {?>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Settings
+                        </a>
 
-                    <ul class="dropdown-menu">
-                        <li><a href="<?php echo base_url(); ?>users"">Users</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo base_url(); ?>users"">Users</a></li>
+                        </ul>
+                    </li>
+                <?php
+                }
+                ?>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-user"></span>
@@ -45,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+                        <li><a href="<?php echo base_url(); ?>logout"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
                     </ul>
                 </li>
             </ul>

@@ -374,7 +374,6 @@ class Patient_Model extends CI_Model
         $this->db->query($sql, array($sFileName,$sPatientEAD ));
     }
 
-
     public function newPatientCheckEad($sEad){
         $sql = "SELECT * FROM patients WHERE 'EAD' = ?";
         $aResult = $this->db->query($sql, array($sEad));

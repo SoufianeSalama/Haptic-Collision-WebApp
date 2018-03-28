@@ -1,5 +1,4 @@
-
-<div class="panel panel-default" style="max-width: 35%; margin: auto;">
+<div class="panel panel-default" style="max-width: 450px; margin: auto;">
     <div class="panel-heading">
         Haptic Collision Webinterface
     </div>
@@ -12,7 +11,7 @@
 
                 <div class="col-sm-12 col-md-10  col-md-offset-1 ">
                     <div>
-                        <p>We will send you an email with your password</p>
+                        <p>We will send you an email with your password.</p>
                     </div></vi>
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <input type="email" name="frmPasswordEmail" class="form-control" placeholder="Email" value="<?php echo set_value('frmPasswordEmail'); ?>">

@@ -1,5 +1,5 @@
 
-<div class="panel panel-default" style="max-width: 350px; margin: auto;">
+<div class="panel panel-default" style="max-width: 450px; margin: auto;">
     <div class="panel-heading">
         Haptic Collision Webinterface
     </div>
@@ -29,6 +29,9 @@
 
                 <div class="col-sm-12 col-md-10  col-md-offset-1 ">
 
+                    <?php echo validation_errors('<div class="row"><div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>', '</div></div>'); ?>
+
+
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <input type="text" name="frmLoginUsername" class="form-control" placeholder="Username" value="<?php echo set_value('frmLoginUsername'); ?>">
                     </div>
@@ -36,10 +39,6 @@
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <input type="password" name="frmLoginPassword" class="form-control" placeholder="Password" value="<?php echo set_value('frmLoginPassword'); ?>">
                     </div>
-
-                    <br>
-
-                    <?php echo validation_errors('<div class="row"><div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>', '</div></div>'); ?>
 
                     <div class="form-group">
                         <input name="frmLoginSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Log in">

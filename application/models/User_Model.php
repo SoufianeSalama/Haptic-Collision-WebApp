@@ -14,7 +14,6 @@ class User_Model extends CI_Model
         $aUsers = $aResult->result();
         if ( isset($aUsers) && !empty($aUsers)){
             // Already user with this email in database
-            $this->form_validation->set_message('email_check', '{field} error: Already used email');
             return false;
         }
         else{ return true;}
@@ -27,7 +26,6 @@ class User_Model extends CI_Model
 
         if ( isset($aUsers) && !empty($aUsers)){
             // Already user with this username in database
-            $this->form_validation->set_message('username_check', '{field} error: Already used username');
             return false;
         }
         else{ return true;}
@@ -46,6 +44,28 @@ class User_Model extends CI_Model
             return false;
         }
         return true;
+    }
+
+    public function loginUserCheck($sUsername, $sPassword){
+
+        try {
+            $sql = "SELECT * FROM docters WHERE username = ? AND approved = 1";
+            $aResult = $this->db->query($sql, array($sUsername));
+            $aUsers = $aResult->result();
+        }
+        catch (Exception $e){ return false; }
+
+        if (!empty($aUsers)){
+            // The user with this username exist
+            $sHashedPassword = $aUsers[0]->password;
+
+            if (password_verify($sPassword, $sHashedPassword)){
+                return $aUsers[0];
+            }
+            else{ return false;}
+
+        }
+        else{ return false;}
     }
 
 }

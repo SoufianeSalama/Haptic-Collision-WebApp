@@ -207,5 +207,4 @@ class Application extends CI_Controller {
             header("Location: ./");
         }
     }
-
 }

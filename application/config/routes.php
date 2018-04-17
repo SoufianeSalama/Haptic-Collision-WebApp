@@ -61,6 +61,8 @@ $route["password"] = "welcome/passwordForgotView";
 // WELCOME FORMS
 $route["frmregister"] = "welcome/registerUserForm";
 $route["frmlogin"] = "welcome/loginUserForm";
+$route["frmforgot"] = "welcome/forgotPassword";
+$route["frmreset"] = "welcome/resetPassword";
 
 // APPLICATION VIEWS
 $route["mypatients"] = "application/myPatientsView";

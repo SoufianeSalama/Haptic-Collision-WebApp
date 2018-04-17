@@ -34,11 +34,11 @@ class User_Model extends CI_Model
 
     public function registerNewUser($aUserData){
         try {
-            $sql = "Insert into docters (firstname, lastname, email, function, workplace, country,phone, surgical_experience, username, password,userlevel, approved )
-                      VALUES (?, ?, ? , ? , ? ,?, ?, ?, ? , ? , ? ,?)";
+            $sql = "Insert into docters (firstname, lastname, email, function, workplace, country,phone, surgical_experience, username, password,userlevel, approved, token )
+                      VALUES (?, ?, ? , ? , ? ,?, ?, ?, ? , ? , ? ,?, ?)";
             $this->db->query($sql, array($aUserData["firstname"], $aUserData["lastname"], $aUserData["email"], $aUserData["function"],
                 $aUserData["workplace"], $aUserData["country"], $aUserData["phone"], $aUserData["surgical_experience"], $aUserData["username"]
-            , $aUserData["password"], $aUserData["userlevel"], $aUserData["approved"]));
+            , $aUserData["password"], $aUserData["userlevel"], $aUserData["approved"], $aUserData["token"]));
         }
         catch(Exception $e){
             return false;
@@ -66,6 +66,17 @@ class User_Model extends CI_Model
 
         }
         else{ return false;}
+    }
+
+	public function resetPassword($aResetData){
+        try {
+            $sql = "UPDATE docters SET password = ? WHERE token = ?";
+            $this->db->query($sql, array($aResetData["password"], $aResetData["token"]));
+        }
+        catch(Exception $e){
+            return false;
+        }
+        return true;
     }
 
 }

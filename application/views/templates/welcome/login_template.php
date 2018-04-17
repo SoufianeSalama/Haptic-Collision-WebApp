@@ -1,7 +1,7 @@
 
 <div class="panel panel-default" style="max-width: 450px; margin: auto;">
     <div class="panel-heading">
-        Haptic Collision Webinterface
+        Ortho Analyzer Webinterface
     </div>
     <div class="panel-body">
 
@@ -23,7 +23,7 @@
                                      You are <strong>successfully</strong> added to the system, but first the admin has to approve your account.
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                 </div>';
-                        }
+                        }					
                     }
                 ?>
 

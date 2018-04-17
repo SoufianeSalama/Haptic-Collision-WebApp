@@ -50,6 +50,26 @@ class Welcome extends CI_Controller {
         }
     }
 
+	public function passwordResetView(){
+        if ($this->checkSession()){
+            header( "Location: ./mypatients" );
+        }else {
+            $aData = array();
+            $sTemplateHome = $this->load->view('templates/welcome/reset_template', $aData, true);
+            $this->showView($sTemplateHome, "Reset password");
+        }
+    }
+
+	public function passwordResetCompleteView(){
+        if ($this->checkSession()){
+            header( "Location: ./mypatients" );
+        }else {
+            $aData = array();
+            $sTemplateHome = $this->load->view('templates/welcome/resetcomplete_template', $aData, true);
+            $this->showView($sTemplateHome, "Reset password complete");
+        }
+    }
+
     public function loginUserForm(){
         if ($this->checkSession()){
             header( "Location: ./mypatients" );
@@ -128,9 +148,43 @@ class Welcome extends CI_Controller {
                     "username" => $this->input->post('frmRegisterUsername'),
                     "password" => password_hash($this->input->post('frmRegisterPassword'), PASSWORD_DEFAULT),
                     "userlevel" => 0,
-                    "approved" => 0
+                    "approved" => 0,
+					"token" => hash('md5', $this->input->post('frmRegisterEmail'))
                 );
                 $this->load->model("User_Model");
+				$this->load->library('email');
+
+				$url = site_url() . 'welcome/approve/token/' . $aUserData["token"];
+
+				$message = 'Dear admin <br><br>'
+					. $this->input->post('frmRegisterFirstName') .' '. $this->input->post('frmRegisterLastName') .' ('. $this->input->post('frmRegisterEmail') . ') have signed up with Ortho Analyzer.
+					<br>This is the user information:<br><br>
+					First name: '.$this->input->post('frmRegisterFirstName').'<br>
+					Last name: '.$this->input->post('frmRegisterLastName').'<br>
+					E-mail: '.$this->input->post('frmRegisterEmail').'<br>
+					Function: '.$this->input->post('frmRegisterFunction').'<br>
+					Workplace: '.$this->input->post('frmRegisterWorkplace').'<br>
+					Country: '.$this->input->post('frmRegisterCountry').'<br>
+					Phone: '.$this->input->post('frmRegisterPhone').'<br>
+					Surgical Experience: '.$this->input->post('frmRegisterSurgicalExperience').'<br>
+					Username: '.$this->input->post('frmRegisterUsername')
+
+					.'<br><br> Please click to activate this account: ' . $url . ' <br><br> Kind regards <br> Ortho Analyzer';
+
+				$config['protocol']   = 'smtp';
+				$config['smtp_host']  = 'uit.telenet.be';
+				$config['charset']    = 'utf-8';
+				$config['newline']    = "\r\n";
+				$config['mailtype']   = 'html';
+				$config['validation'] = TRUE;
+				$this->email->initialize($config);
+				$this->email->from('webappmailaddress', 'Ortho Analyzer');
+				$this->email->to('adminmailaddress');
+				$this->email->subject('Account verification for ' . $this->input->post('frmRegisterEmail'));
+				$this->email->message($message);
+				$this->email->send();
+
+				//echo $this->email->print_debugger();
 
                 if ($this->User_Model->registerNewUser($aUserData)) {
                     $this->loginView(true);
@@ -165,5 +219,132 @@ class Welcome extends CI_Controller {
         }
         else{ return true;}
 
+    }
+
+	public function approve(){
+    	$token = $this->uri->segment(4);
+		$sResult = array();
+		$sUsers = array();
+
+		$sqlUpdate = "UPDATE docters SET approved = 1 WHERE token = ?";
+        $aResult = $this->db->query($sqlUpdate, array($token));
+
+		$sqlSelect = "SELECT * FROM docters WHERE token = ?";
+		$sResult = $this->db->query($sqlSelect, array($token));
+		$sUsers = $sResult->row();
+
+		if (isset($sUsers))
+		{
+			$uMail = $sUsers->email;
+			$uFirstname = $sUsers->firstname;
+			$uLastname = $sUsers->lastname;
+		}
+
+		$this->load->library('email');
+
+		$message = 'Dear '.$uFirstname.' '.$uLastname.
+					'<br>
+					<br>
+					Our admin decided to approve your account request.
+					<br>
+					You can now login into the Ortho Analyzer webinterface.<br>
+					Please use your chosen username and password.
+					<br>
+					<br>
+					Kind regards
+					<br>
+					Ortho Analyzer';
+
+		$config['protocol']   = 'smtp';
+		$config['smtp_host']  = 'uit.telenet.be';
+		$config['charset']    = 'utf-8';
+		$config['newline']    = "\r\n";
+		$config['mailtype']   = 'html';
+		$config['validation'] = TRUE;
+		$this->email->initialize($config);
+		$this->email->from('webappmailaddress', 'Ortho Analyzer');
+		$this->email->to($uMail);
+		$this->email->subject('Your account request for Ortho Analyzer has been approved');
+		$this->email->message($message);
+		$this->email->send();
+
+		$aData = array();
+        $sTemplateHome = $this->load->view('templates/welcome/approval_template', $aData, true);
+        $this->showView($sTemplateHome, "Approve user");
+
+    }
+
+	public function forgotPassword(){
+		$sResult = array();
+		$sUsers = array();
+
+		$sqlSelect = "SELECT * FROM docters WHERE email = ?";
+		$sResult = $this->db->query($sqlSelect, array($this->input->post('frmPasswordEmail')));
+		$sUsers = $sResult->row();
+
+		if (isset($sUsers))
+		{
+			$uToken = $sUsers->token;
+			$uFirstname = $sUsers->firstname;
+			$uLastname = $sUsers->lastname;
+		}
+
+		$this->load->library('email');
+
+		$url = site_url() . 'welcome/resetpassword/' . $uToken;
+
+		$message = 'Dear '.$uFirstname.' '.$uLastname.
+			'<br>
+			<br>'.'You requested a new password.
+			<br>
+			<br>
+			Please click to reset your password:
+			<br>' . $url .
+			'<br>
+			<br>If you did not ask a new password, this mail can be ignored.
+			<br>
+			<br>Kind regards
+			<br>Ortho Analyzer';
+
+
+		$config['protocol']   = 'smtp';
+		$config['smtp_host']  = 'uit.telenet.be';
+		$config['charset']    = 'utf-8';
+		$config['newline']    = "\r\n";
+		$config['mailtype']   = 'html';
+		$config['validation'] = TRUE;
+		$this->email->initialize($config);
+		$this->email->from('webappmailaddress', 'Ortho Analyzer');
+		$this->email->to($this->input->post('frmPasswordEmail'));
+		$this->email->subject('Password forgot request for ' . $this->input->post('frmPasswordEmail'));
+		$this->email->message($message);
+		$this->email->send();
+
+		$aData = array();
+		$sTemplateHome = $this->load->view('templates/welcome/request_template', $aData, true);
+		$this->showView($sTemplateHome, "Request password reset");
+
+	}
+
+	public function resetPassword(){
+		$this->form_validation->set_rules('frmResetPassword', 'New Password', 'required|trim');
+		$this->form_validation->set_rules('frmResetPasswordConfirm', 'Confirm Password', 'required|trim|matches[frmResetPassword]');
+
+		if ($this->form_validation->run() == FALSE) {
+			$this->passwordResetView();
+		} else {
+			$aResetData = array(
+                    "password" => password_hash($this->input->post('frmResetPassword'), PASSWORD_DEFAULT),
+					"token" => $this->input->post('token')
+			);
+
+            $this->load->model("User_Model");
+			if ($this->User_Model->resetPassword($aResetData)) {
+                    $this->passwordResetCompleteView();
+                } else {
+                    $this->passwordResetView();
+                }
+
+		}
     }
 }

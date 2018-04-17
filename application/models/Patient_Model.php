@@ -388,7 +388,7 @@ class Patient_Model extends CI_Model
     public function newPatient($aPatient, $iDocter_id){
         try {
             $sql = "Insert into patients (ead, firstname, lastname, gender, birthdate, docter_id) VALUES (?, ?, ? , ? , ? ,?)";
-            $this->db->query($sql, array($aPatient["ead"], $aPatient["firstname"], $aPatient["lastname"], $aPatient["birtdate"], $aPatient["gender"], $iDocter_id));
+            $this->db->query($sql, array($aPatient["ead"], $aPatient["firstname"], $aPatient["lastname"], $aPatient["gender"], $aPatient["birthdate"], $iDocter_id));
         }
         catch(Exception $e){
             return false;

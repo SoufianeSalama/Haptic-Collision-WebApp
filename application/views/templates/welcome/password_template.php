@@ -1,13 +1,13 @@
 <div class="panel panel-default" style="max-width: 450px; margin: auto;">
     <div class="panel-heading">
-        Haptic Collision Webinterface
+        Ortho Analyzer Webinterface
     </div>
     <div class="panel-body">
 
         <fieldset>
 
             <div class="row">
-                <?php echo form_open('register'); ?>
+                <?php echo form_open('frmforgot'); ?>
 
                 <div class="col-sm-12 col-md-10  col-md-offset-1 ">
                     <div>
@@ -22,7 +22,7 @@
                     <?php echo validation_errors('<div class="row"><div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>', '</div></div>'); ?>
 
                     <div class="form-group">
-                        <input name="frmRegisterSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Reset password">
+                        <input name="frmForgotSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Reset password">
                     </div>
 
                 </div>

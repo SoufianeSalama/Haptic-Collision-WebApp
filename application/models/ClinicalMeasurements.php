@@ -49,13 +49,13 @@ class ClinicalMeasurements
     public $s_transverse_ratio;
     public $s_face_length_ratio;
     public $s_profile;
-    public $d_maxilla_advancement;
+    /*public $d_maxilla_advancement;
     public $s_maxilla_pieces;
     public $s_maxilla_anterior;
     public $s_maxilla_posterior;
     public $s_maxilla_midline_rotation;
     public $s_mandible_advancement_setback;
     public $d_chin_advancement;
-    public $d_chin_intrusion_extrusion;
+    public $d_chin_intrusion_extrusion;*/
     public $s_notes;
 }

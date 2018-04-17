@@ -9,7 +9,7 @@
 class User_Model extends CI_Model
 {
     public function registerEmailCheck($sEmail){
-        $sql = "SELECT * FROM docters WHERE email = ?";
+        $sql = "SELECT * FROM users WHERE email = ?";
         $aResult = $this->db->query($sql, array($sEmail));
         $aUsers = $aResult->result();
         if ( isset($aUsers) && !empty($aUsers)){
@@ -20,7 +20,7 @@ class User_Model extends CI_Model
 
     }
     public function registerUsernameCheck($sUsername){
-        $sql = "SELECT * FROM docters WHERE username = ?";
+        $sql = "SELECT * FROM users WHERE username = ?";
         $aResult = $this->db->query($sql, array($sUsername));
         $aUsers = $aResult->result();
 
@@ -31,10 +31,9 @@ class User_Model extends CI_Model
         else{ return true;}
 
     }
-
     public function registerNewUser($aUserData){
         try {
-            $sql = "Insert into docters (firstname, lastname, email, function, workplace, country,phone, surgical_experience, username, password,userlevel, approved )
+            $sql = "Insert into users (firstname, lastname, email, function, workplace, country,phone, surgical_experience, username, password,userlevel, approved )
                       VALUES (?, ?, ? , ? , ? ,?, ?, ?, ? , ? , ? ,?)";
             $this->db->query($sql, array($aUserData["firstname"], $aUserData["lastname"], $aUserData["email"], $aUserData["function"],
                 $aUserData["workplace"], $aUserData["country"], $aUserData["phone"], $aUserData["surgical_experience"], $aUserData["username"]
@@ -49,7 +48,7 @@ class User_Model extends CI_Model
     public function loginUserCheck($sUsername, $sPassword){
 
         try {
-            $sql = "SELECT * FROM docters WHERE username = ? AND approved = 1";
+            $sql = "SELECT * FROM users WHERE username = ?";
             $aResult = $this->db->query($sql, array($sUsername));
             $aUsers = $aResult->result();
         }
@@ -67,5 +66,40 @@ class User_Model extends CI_Model
         }
         else{ return false;}
     }
+
+    public function getAllUsers(){
+        try{
+            $sql = "SELECT * FROM users WHERE userlevel BETWEEN  ? AND ?";
+            $query = $this->db->query($sql, array(0,3));
+        }
+        catch(Exception $e){
+            return false;
+        }
+        return $query;
+    }
+
+    public function modifyUser($aUser){
+        $sSQL = "UPDATE users SET userlevel = ?, approved = ? WHERE userid = ?";
+        try{
+            $this->db->query($sSQL, array($aUser["userlevel"],$aUser["approved"],$aUser["userid"]));
+        }
+        catch (Exception $e){
+            return false;
+        }
+        return true;
+    }
+
+    public function deleteUser($sUserId){
+        $sSQL = "DELETE FROM users WHERE userid = ?";
+        try{
+            $this->db->query($sSQL, array($sUserId));
+        }
+        catch (Exception $e){
+            return false;
+        }
+        return true;
+    }
+
+
 
 }

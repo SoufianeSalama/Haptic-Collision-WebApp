@@ -89,6 +89,10 @@ class Welcome extends CI_Controller {
             return false;
         }
         else{
+            if (!$bResult->approved){
+                $this->form_validation->set_message('user_check', 'You are not approved, please contact adminstrator');
+                return false;
+            }
             return true;
         }
     }

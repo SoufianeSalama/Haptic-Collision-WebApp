@@ -33,11 +33,11 @@
 
 
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
-                        <input type="text" name="frmLoginUsername" class="form-control" placeholder="Username" value="<?php echo set_value('frmLoginUsername'); ?>">
+                        <input type="text" name="frmLoginUsername" class="form-control" placeholder="Username" value="<?php echo set_value('frmLoginUsername'); ?>" required>
                     </div>
 
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
-                        <input type="password" name="frmLoginPassword" class="form-control" placeholder="Password" value="<?php echo set_value('frmLoginPassword'); ?>">
+                        <input type="password" name="frmLoginPassword" class="form-control" placeholder="Password" value="<?php echo set_value('frmLoginPassword'); ?>" required>
                     </div>
 
                     <div class="form-group">

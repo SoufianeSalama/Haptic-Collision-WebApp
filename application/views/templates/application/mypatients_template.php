@@ -26,7 +26,7 @@ if (isset($bAlert) && !empty($bAlert)){
                         <h3 class="panel-title">My Patients</h3>
                     </div>
                     <div class="col col-xs-6 text-right">
-                        <button type="button" class="btn btn-sm btn-primary btn-create btn-showform"  data-toggle="modal" data-target="#modalNewPatient">+ new patient</button>
+                        <button type="button" class="btn btn-sm btn-primary btn-create btn-showform"  data-toggle="modal" data-target="#modalNewPatient">+ New Patient</button>
                     </div>
                 </div>
             </div>

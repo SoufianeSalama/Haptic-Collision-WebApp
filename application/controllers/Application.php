@@ -25,9 +25,9 @@ class Application extends CI_Controller {
         }else{
             $iDocterId = $this->session->userdata('userid');
             $this->load->model('Patient_Model');
-            $aResult = $this->Patient_Model->getMyPatients($iDocterId);
+            $aMyPatients = $this->Patient_Model->getMyPatients($iDocterId);
             $aData = array();
-            $aData["aMyPatients"] = $aResult->result();
+            $aData["aMyPatients"] = $aMyPatients;
             $aData["bAlert"] = $bSucces;
             $sTemplateHome = $this->load->view('templates/application/mypatients_template', $aData, true);
             $this->showView($sTemplateHome, "My Patients");
@@ -59,12 +59,17 @@ class Application extends CI_Controller {
 
     }
 
-    public function userSettingsView(){
+    public function userSettingsView($bSucces=null){
         if (!$this->checkSession()){
             header( "Location: ./" );
         }else {
-            if ($this->session->userdata('userlevel')){
+            if ($this->session->userdata('userlevel') == 2){
+                $this->load->model('User_Model');
+                $aResult = $this->User_Model->getAllUsers();
+
                 $aData = array();
+                $aData["bAlert"] = $bSucces;
+                $aData["aUsers"] =$aResult->result();
                 $sTemplateHome = $this->load->view('templates/application/users_template', $aData, true);
                 $this->showView($sTemplateHome, "Users Settings");
             }
@@ -85,6 +90,21 @@ class Application extends CI_Controller {
             } else {
                 $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with modifying Clinical Measurements data!";
                 $aData["message"] = "error nr. 5";
+                $this->load->view('errors/html/error_general', $aData);
+            }
+        }
+    }
+
+    public function clinicalDecisionDataForm(){
+        if (!$this->checkSession()){
+            header( "Location: ./" );
+        }else {
+            $this->load->model('Patient_Model');
+            if ($this->Patient_Model->clinicalDecisionDataFormVal()) {
+                $this->patientProfileView($this->input->post('frmClinicalDecisionData_ead'), true);
+            } else {
+                $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with modifying Clinical Decision data!";
+                $aData["message"] = "error nr. 6";
                 $this->load->view('errors/html/error_general', $aData);
             }
         }
@@ -179,7 +199,7 @@ class Application extends CI_Controller {
                     $this->myPatientsView(true);
                 } else {
                     $aData["heading"] = "Haptic Collision Webapplication ERROR: Patient is not added!";
-                    $aData["message"] = "10";
+                    $aData["message"] = "15";
                     $this->load->view('errors/html/error_general', $aData);
                 }
                 return true;
@@ -195,6 +215,36 @@ class Application extends CI_Controller {
     public function patientead_check($sEad){
         $this->load->model('Patient_Model');
         return $this->Patient_Model->newPatientCheckEad($sEad);
+    }
+
+    public function modifyUserForm(){
+        $aUser = array(
+            "userid" => $this->input->post('frmModifyUserId'),
+            "userlevel" => $this->input->post('frmModifyUserLevel'),
+            "approved" => $this->input->post('frmModifyUserApproved')
+        );
+        //var_dump($aUser);
+        $this->load->model('User_Model');
+        if ($this->User_Model->modifyUser($aUser)){
+            $this->userSettingsView(true);
+        }else{
+            $aData["heading"] = "Haptic Collision Webapplication ERROR: User is not modified!";
+            $aData["message"] = "15";
+            $this->load->view('errors/html/error_general', $aData);
+        }
+
+    }
+
+    public function deleteUserForm(){
+        $sUserId = $this->input->post('frmDeleteUserId');
+        $this->load->model('User_Model');
+        if ($this->User_Model->deleteUser($sUserId)){
+            $this->userSettingsView(true);
+        }else{
+            $aData["heading"] = "Haptic Collision Webapplication ERROR: User is not deleted!";
+            $aData["message"] = "16";
+            $this->load->view('errors/html/error_general', $aData);
+        }
     }
 
     public function userLogout()

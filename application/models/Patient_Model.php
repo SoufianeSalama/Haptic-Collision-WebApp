@@ -12,11 +12,11 @@ class Patient_Model extends CI_Model
         // Get general patients info
         try{
             $sql = "SELECT * FROM patients WHERE docter_id = ? ";
-            $query = $this->db->query($sql, array($iDocter_id));
+            $aPatients = $this->db->query($sql, array($iDocter_id));
         }catch(SQLiteException $e){
-            return array(false,$e);
+            return false;
         }
-        return $query;
+        return $aPatients->result();
     }
 
     public function getPatient($sPatientsEAD){
@@ -79,14 +79,14 @@ class Patient_Model extends CI_Model
         $this->form_validation->set_rules('frmClinicalData_face_length_ratio', 'Patient Face length ratio', 'trim');
         $this->form_validation->set_rules('frmClinicalData_profile', 'Patient Profile', 'trim');
         // Step 5
-        $this->form_validation->set_rules('frmClinicalData_maxilla_advancement', 'Patient Maxilla-advancement', 'trim');
+        /*$this->form_validation->set_rules('frmClinicalData_maxilla_advancement', 'Patient Maxilla-advancement', 'trim');
         $this->form_validation->set_rules('frmClinicalData_maxilla_pieces', 'Patient Maxilla pieces', 'trim');
         $this->form_validation->set_rules('frmClinicalData_maxilla_anterior', 'Patient Maxilla anterior', 'trim');
         $this->form_validation->set_rules('frmClinicalData_maxilla_posterior', 'Patient Maxilla posterior', 'trim');
         $this->form_validation->set_rules('frmClinicalData_maxilla_midline_rotation', 'Patient Maxilla midline rotation', 'trim');
         $this->form_validation->set_rules('frmClinicalData_mandible_advancement_setback', 'Patient Mandible-advancement/setback', 'trim');
         $this->form_validation->set_rules('frmClinicalData_chin_advancement', 'Patient Chin-advancement/setback', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_chin_intrusion_extrusion', 'Patient Chin-intrusion/extrusion', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_chin_intrusion_extrusion', 'Patient Chin-intrusion/extrusion', 'trim');*/
 
         // Step 6
         $this->form_validation->set_rules('frmClinicalData_notes', 'Patient Notes', 'trim');
@@ -146,14 +146,14 @@ class Patient_Model extends CI_Model
             $oClinicalMeasurements->s_face_length_ratio = $this->input->post('frmClinicalData_face_length_ratio');
             $oClinicalMeasurements->s_profile = $this->input->post('frmClinicalData_profile');
 
-            $oClinicalMeasurements->d_maxilla_advancement = $this->input->post('frmClinicalData_maxilla_advancement');
+            /*$oClinicalMeasurements->d_maxilla_advancement = $this->input->post('frmClinicalData_maxilla_advancement');
             $oClinicalMeasurements->s_maxilla_pieces = $this->input->post('frmClinicalData_maxilla_pieces');
             $oClinicalMeasurements->s_maxilla_anterior = $this->input->post('frmClinicalData_maxilla_anterior');
             $oClinicalMeasurements->s_maxilla_posterior = $this->input->post('frmClinicalData_maxilla_posterior');
             $oClinicalMeasurements->s_maxilla_midline_rotation = $this->input->post('frmClinicalData_maxilla_midline_rotation');
             $oClinicalMeasurements->s_mandible_advancement_setback = $this->input->post('frmClinicalData_mandible_advancement_setback');
             $oClinicalMeasurements->d_chin_advancement = $this->input->post('frmClinicalData_chin_advancement');
-            $oClinicalMeasurements->d_chin_intrusion_extrusion = $this->input->post('frmClinicalData_chin_intrusion_extrusion');
+            $oClinicalMeasurements->d_chin_intrusion_extrusion = $this->input->post('frmClinicalData_chin_intrusion_extrusion');*/
 
             $oClinicalMeasurements->s_notes = $this->input->post('frmClinicalData_notes');
 
@@ -179,9 +179,7 @@ class Patient_Model extends CI_Model
                   deviation_midline_chin = ?,	fullness_lips = ?,	interlabial_gap = ?,	gummy_smile_front = ?,	gummy_smile_posterieur = ?,	lip_incompetence = ?,	
                   curling_out_lower_lip  = ?,	lip_trap = ?,	indentations_on_lower_lip = ?,	indentations_in_palatum = ?,	buccal_corridor = ?,
                   nose_decription = ?,	nasolabial_angle = ?,	oribtae = ?,	zygomata = ?,	pommette = ?,	paranasale_fossa = ?,	chin_fold = ?,	mentalis_strain = ?,
-                  chin_height = ?,	chin_neck_distance = ?,	chin_neck_transition = ?,	transverse_ratio = ?,	face_length_ratio = ?, profile = ?,	maxilla_advancement = ?,
-                  maxilla_pieces = ?,	maxilla_anterior = ?,	maxilla_posterior = ?,	maxilla_midline_rotation = ?, mandible_advancement_setback = ?,	chin_advancement = ?,	
-                  chin_intrusion_extrusion = ?,	notes = ? WHERE patient_ead = ? ";
+                  chin_height = ?,	chin_neck_distance = ?,	chin_neck_transition = ?,	transverse_ratio = ?,	face_length_ratio = ?, profile = ?,	notes = ? WHERE patient_ead = ? ";
 
                 $this->db->query($sql, array(
                     $oClinicalMeasurements->d_icw, $oClinicalMeasurements->d_naw_outer, $oClinicalMeasurements->d_naw_inner, $oClinicalMeasurements->d_upper_lip_length_inc,$oClinicalMeasurements->d_upper_lip_length_exc,
@@ -192,9 +190,7 @@ class Patient_Model extends CI_Model
                     $oClinicalMeasurements->b_indentations_in_palatum, $oClinicalMeasurements->b_buccal_corridor, $oClinicalMeasurements->s_nose_decription, $oClinicalMeasurements->s_nasolabial_angle,
                     $oClinicalMeasurements->s_oribtae, $oClinicalMeasurements->s_zygomata,  $oClinicalMeasurements->s_pommette, $oClinicalMeasurements->b_paranasale_fossa,  $oClinicalMeasurements->b_chin_fold,
                     $oClinicalMeasurements->b_mentalis_strain, $oClinicalMeasurements->d_chin_height, $oClinicalMeasurements->d_chin_neck_distance,  $oClinicalMeasurements->s_chin_neck_transition, $oClinicalMeasurements->s_transverse_ratio,
-                    $oClinicalMeasurements->s_face_length_ratio, $oClinicalMeasurements->s_profile,$oClinicalMeasurements->d_maxilla_advancement, $oClinicalMeasurements->s_maxilla_pieces, $oClinicalMeasurements->s_maxilla_anterior,
-                    $oClinicalMeasurements->s_maxilla_posterior, $oClinicalMeasurements->s_maxilla_midline_rotation, $oClinicalMeasurements->s_mandible_advancement_setback,  $oClinicalMeasurements->d_chin_advancement,
-                    $oClinicalMeasurements->d_chin_intrusion_extrusion, $oClinicalMeasurements->s_notes, $oClinicalMeasurements->s_ead
+                    $oClinicalMeasurements->s_face_length_ratio, $oClinicalMeasurements->s_profile, $oClinicalMeasurements->s_notes, $oClinicalMeasurements->s_ead
                 ));
             }
             else{
@@ -206,9 +202,7 @@ class Patient_Model extends CI_Model
                   deviation_midline_chin ,	fullness_lips ,	interlabial_gap ,	gummy_smile_front,	gummy_smile_posterieur,	lip_incompetence ,	
                   curling_out_lower_lip  ,	lip_trap ,	indentations_on_lower_lip,	indentations_in_palatum ,	buccal_corridor ,
                   nose_decription ,	nasolabial_angle ,	oribtae ,	zygomata ,	pommette ,	paranasale_fossa,	chin_fold ,	mentalis_strain ,
-                  chin_height ,	chin_neck_distance ,	chin_neck_transition ,	transverse_ratio ,	face_length_ratio , profile ,	maxilla_advancement ,
-                  maxilla_pieces,	maxilla_anterior ,	maxilla_posterior ,	maxilla_midline_rotation, mandible_advancement_setback ,	chin_advancement ,	
-                  chin_intrusion_extrusion ,	notes) 
+                  chin_height ,	chin_neck_distance ,	chin_neck_transition ,	transverse_ratio ,	face_length_ratio , profile ,	notes) 
                    VALUES (
                    ?,
                    ?, ?, ? , ? , ? ,?, ? ,
@@ -216,9 +210,7 @@ class Patient_Model extends CI_Model
                    ? ,? ,?,  ?,  ?, ? ,
                    ?, ?, ? , ? , ?,
                    ? ,? ,? , ?,  ?, ?, ? , ? , 
-                   ?, ?, ? , ? , ? ,?, ?,
-                   ?, ?, ? , ? , ? ,?,
-                    ? ,?                  
+                   ?, ?, ? , ? , ? ,?, ?                
                    )";
 
                 $this->db->query($sql, array(
@@ -231,9 +223,103 @@ class Patient_Model extends CI_Model
                     $oClinicalMeasurements->b_indentations_in_palatum, $oClinicalMeasurements->b_buccal_corridor, $oClinicalMeasurements->s_nose_decription, $oClinicalMeasurements->s_nasolabial_angle,
                     $oClinicalMeasurements->s_oribtae, $oClinicalMeasurements->s_zygomata,  $oClinicalMeasurements->s_pommette, $oClinicalMeasurements->b_paranasale_fossa,  $oClinicalMeasurements->b_chin_fold,
                     $oClinicalMeasurements->b_mentalis_strain, $oClinicalMeasurements->d_chin_height, $oClinicalMeasurements->d_chin_neck_distance,  $oClinicalMeasurements->s_chin_neck_transition, $oClinicalMeasurements->s_transverse_ratio,
-                    $oClinicalMeasurements->s_face_length_ratio, $oClinicalMeasurements->s_profile,$oClinicalMeasurements->d_maxilla_advancement, $oClinicalMeasurements->s_maxilla_pieces, $oClinicalMeasurements->s_maxilla_anterior,
-                    $oClinicalMeasurements->s_maxilla_posterior, $oClinicalMeasurements->s_maxilla_midline_rotation, $oClinicalMeasurements->s_mandible_advancement_setback,  $oClinicalMeasurements->d_chin_advancement,
-                    $oClinicalMeasurements->d_chin_intrusion_extrusion, $oClinicalMeasurements->s_notes
+                    $oClinicalMeasurements->s_face_length_ratio, $oClinicalMeasurements->s_profile, $oClinicalMeasurements->s_notes
+                ));
+            }
+        }
+        catch (Exception $e){
+            return false;
+        }
+        return true;
+    }
+
+    public function clinicalDecisionDataFormVal()
+    {
+        $this->form_validation->set_rules('frmClinicalData_maxilla_advancement', 'Patient Maxilla-advancement', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_maxilla_pieces', 'Patient Maxilla pieces', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_maxilla_anterior', 'Patient Maxilla anterior', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_maxilla_posterior', 'Patient Maxilla posterior', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_maxilla_midline_rotation', 'Patient Maxilla midline rotation', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_mandible_advancement_setback', 'Patient Mandible-advancement/setback', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_chin_advancement', 'Patient Chin-advancement/setback', 'trim');
+        $this->form_validation->set_rules('frmClinicalData_chin_intrusion_extrusion', 'Patient Chin-intrusion/extrusion', 'trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            return false;
+        } else {
+            require_once "./application/models/ClinicalDecision.php";
+
+            $oClinicalDecision = new ClinicalDecision();
+
+            $oClinicalDecision->s_ead = $this->input->post('frmClinicalDecisionData_ead');
+
+            $oClinicalDecision->d_maxilla_advancement = $this->input->post('frmClinicalData_maxilla_advancement');
+            $oClinicalDecision->s_maxilla_pieces = $this->input->post('frmClinicalData_maxilla_pieces');
+            $oClinicalDecision->s_maxilla_anterior = $this->input->post('frmClinicalData_maxilla_anterior');
+            $oClinicalDecision->s_maxilla_posterior = $this->input->post('frmClinicalData_maxilla_posterior');
+            $oClinicalDecision->s_maxilla_midline_rotation = $this->input->post('frmClinicalData_maxilla_midline_rotation');
+            $oClinicalDecision->s_mandible_advancement_setback = $this->input->post('frmClinicalData_mandible_advancement_setback');
+            $oClinicalDecision->d_chin_advancement = $this->input->post('frmClinicalData_chin_advancement');
+            $oClinicalDecision->d_chin_intrusion_extrusion = $this->input->post('frmClinicalData_chin_intrusion_extrusion');
+
+            if ($this->addClinicalDecisionData($oClinicalDecision)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+    }
+    private function addClinicalDecisionData($oClinicalDecision){
+        //Check if there's already data of this patient in database
+        $sql = "SELECT * FROM clinical_measurements WHERE patient_ead = ?";
+        try{
+            $aResult = $this->db->query($sql, array($oClinicalDecision->s_ead));
+            if ( isset($aResult->result()[0]) && !empty($aResult->result()) ){
+                // Already data of this patient in database
+                $sql = "UPDATE clinical_measurements SET
+                  maxilla_advancement  = ?,
+                  maxilla_pieces  = ?,
+                  maxilla_anterior  = ?,
+                  maxilla_posterior  = ?,
+                  maxilla_midline_rotation  = ?,
+                  mandible_advancement_setback  = ?,
+                  chin_advancement  = ?,
+                  chin_intrusion_extrusion  = ?,
+                  
+                  WHERE patient_ead = ? ";
+
+                $this->db->query($sql, array(
+                    $oClinicalDecision->d_maxilla_advancement,
+                    $oClinicalDecision->s_maxilla_pieces ,
+                    $oClinicalDecision->s_maxilla_anterior ,
+                    $oClinicalDecision->s_maxilla_posterior ,
+                    $oClinicalDecision->s_maxilla_midline_rotation ,
+                    $oClinicalDecision->s_mandible_advancement_setback ,
+                    $oClinicalDecision->d_chin_advancement,
+                    $oClinicalDecision->d_chin_intrusion_extrusion,
+                    $oClinicalDecision->s_ead
+                ));
+            }
+            else{
+                // No data of this patient in database
+                $sql = "Insert into clinical_measurements (
+                      patient_ead, maxilla_advancement, maxilla_pieces, maxilla_anterior, maxilla_posterior, maxilla_midline_rotation, mandible_advancement_setback, chin_advancement,chin_intrusion_extrusion
+                  ) 
+                   VALUES (
+                   ?, ?, ? ,?, ?, ? , ? ,?, ?
+                   )";
+
+                $this->db->query($sql, array(
+                    $oClinicalDecision->s_ead,
+                    $oClinicalDecision->d_maxilla_advancement,
+                    $oClinicalDecision->s_maxilla_pieces ,
+                    $oClinicalDecision->s_maxilla_anterior ,
+                    $oClinicalDecision->s_maxilla_posterior ,
+                    $oClinicalDecision->s_maxilla_midline_rotation ,
+                    $oClinicalDecision->s_mandible_advancement_setback ,
+                    $oClinicalDecision->d_chin_advancement,
+                    $oClinicalDecision->d_chin_intrusion_extrusion
                 ));
             }
         }

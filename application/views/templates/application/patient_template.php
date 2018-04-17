@@ -20,13 +20,19 @@ if (isset($bAlert) && !empty($bAlert)){
                 <div class="col col-xs-6 text-right">
                     <button type="button" class="btn btn-sm btn-primary btn-create btn-showform"  data-toggle="modal" data-target="#modalClinicalMeas">Clinical Measurements</button>
                     <button type="button" class="btn btn-sm btn-primary btn-create btn-showform"  data-toggle="modal" data-target="#modalExcelData">Radiograph Analyze(Excel)</button>
+                    <?php
+                    if ($this->session->userdata('userlevel') == 1 || $this->session->userdata('userlevel') == 2){
+                        ?>
+                        <button type="button" class="btn btn-sm btn-primary btn-create btn-showform"  data-toggle="modal" data-target="#modalClinicalDicision">Clinical Decision</button>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-2 col-xs-8 col-sm-3 col-lg-2">
-                    <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive">
                 </div>
                 <div class="col-md-10 col-xs-12 col-sm-9 col-lg-8" >
                     <table>
@@ -535,7 +541,7 @@ if (isset($bAlert) && !empty($bAlert)){
                 <input type="hidden" name="frmClinicalData_ead" class="form-control" value="<?php echo $aPatient->ead; ?>" >
 
                 <div id="step1">
-                    <h3 style="margin-top: 5px;">Step 1/6</h3>
+                    <h3 style="margin-top: 5px;">Step 1/5</h3>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -598,7 +604,7 @@ if (isset($bAlert) && !empty($bAlert)){
                 </div>
 
                 <div id="step2">
-                    <h3 style="margin-top: 5px;">Step 2/6</h3>
+                    <h3 style="margin-top: 5px;">Step 2/5</h3>
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -625,13 +631,13 @@ if (isset($bAlert) && !empty($bAlert)){
                             <div class="form-group">
                                 <label>Fullness lips (thin/normal/full):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="thin">Thin</label>
+                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="thin" <?php if($aPatient->fullness_lips  =='thin'){ echo "checked";}; ?>>Thin</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="normal">Normal</label>
+                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="normal" <?php if($aPatient->fullness_lips  =='normal'){ echo "checked";}; ?>>Normal</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="full">Full</label>
+                                    <label><input type="radio" name="frmClinicalData_fullness_lips" value="full" <?php if($aPatient->fullness_lips  =='full'){ echo "checked";}; ?>>Full</label>
                                 </div>
                             </div>
                         </div>
@@ -686,7 +692,7 @@ if (isset($bAlert) && !empty($bAlert)){
                 </div>
 
                 <div id="step3">
-                    <h3 style="margin-top: 5px;">Step 3/6</h3>
+                    <h3 style="margin-top: 5px;">Step 3/5</h3>
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -824,7 +830,7 @@ if (isset($bAlert) && !empty($bAlert)){
                 </div>
 
                 <div id="step4">
-                    <h3 style="margin-top: 5px;">Step 4/6</h3>
+                    <h3 style="margin-top: 5px;">Step 4/5</h3>
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -896,96 +902,7 @@ if (isset($bAlert) && !empty($bAlert)){
                 </div>
 
                 <div id="step5">
-                    <h3 style="margin-top: 5px;">Step 5/6</h3>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Maxilla-advancement (mm):</label>
-                                <input type="number" name="frmClinicalData_maxilla_advancement" class="form-control" value="<?php echo $aPatient->maxilla_advancement  ; ?>" >
-                            </div>
-                            <div class="form-group">
-                                <label>Pieces (1/3):</label>
-                                <div class="radio">
-                                   <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="1">1 piece</label>
-                                </div>
-                                <div class="radio">
-                                   <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="2">2 pieces</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="3">3 pieces</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_maxilla_pieces" value="no">No</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Anterior (intrusion/extrusion):</label>
-                                <!--<div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_maxilla_anterior" value="intrusion">Intrusion</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_maxilla_anterior" value="extrusion">Extrusion</label>
-                                </div>-->
-                                <input type="text" name="frmClinicalData_maxilla_anterior" class="form-control" value="<?php echo $aPatient->maxilla_anterior  ; ?>" placeholder="extrusion 3 mm">
-                            </div>
-                            <div class="form-group">
-                                <label>Posterior (intrusion/extrusion):</label>
-                                <!--<div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_maxilla_posterior" value="intrusion">Intrusion</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_maxilla_posterior" value="extrusion">Extrusion</label>
-                                </div>-->
-                                <input type="text" name="frmClinicalData_maxilla_posterior" class="form-control" value="<?php echo $aPatient->maxilla_posterior   ; ?>" placeholder="extrusion 3 mm">
-
-                            </div>
-
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Midline rotation (no/rotation to...):</label>
-                                <input type="text" name="frmClinicalData_maxilla_midline_rotation" class="form-control" value="<?php echo $aPatient->maxilla_midline_rotation    ; ?>">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Mandible-advancement/setback (advancement/setback):</label>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_mandible_advancement_setback" value="advancement" <?php if($aPatient->gummy_smile_posterieur =='advancement'){ echo "checked";}; ?>>Advancement</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_mandible_advancement_setback" value="setback" <?php if($aPatient->gummy_smile_posterieur =='setback'){ echo "checked";}; ?>>Setback</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_mandible_advancement_setback" value="no" <?php if($aPatient->gummy_smile_posterieur =='no'){ echo "checked";}; ?>>No</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Chin-advancement/setback (mm):</label>
-                                <input type="number" name="frmClinicalData_chin_advancement" class="form-control" value="<?php echo $aPatient->chin_advancement; ?>">
-                            </div>
-                            <div class="form-group">
-                                <label>Chin-intrusion/extrusion:</label>
-                                <input type="number" name="frmClinicalData_chin_intrusion_extrusion" class="form-control" value="<?php echo $aPatient->chin_intrusion_extrusion; ?>" placeholder="extrusion 3 mm">>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep5Previous" />
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Next" id="frmClinicalDataStep5Next" />
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div id="step6">
-                    <h3 style="margin-top: 5px;">Step 6/6</h3>
+                    <h3 style="margin-top: 5px;">Step 5/5</h3>
 
                     <div class="row">
                         <div class="col-sm-12">
@@ -999,10 +916,10 @@ if (isset($bAlert) && !empty($bAlert)){
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep6Previous" />
+                            <input type="button" class="btn btn-lg btn-primary btn-block" value="Previous" id="frmClinicalDataStep5Previous" />
                         </div>
                         <div class="col-sm-6">
-                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit" id="frmClinicalDataStep6Submit" />
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit" id="frmClinicalDataStep5Submit" />
                         </div>
                     </div>
 
@@ -1022,7 +939,6 @@ if (isset($bAlert) && !empty($bAlert)){
         $("#step3").hide();
         $("#step4").hide();
         $("#step5").hide();
-        $("#step6").hide();
 
         $("#frmClinicalDataStep1Next").click(function(){
             $("#step1").hide();
@@ -1062,16 +978,6 @@ if (isset($bAlert) && !empty($bAlert)){
         $("#frmClinicalDataStep5Previous").click(function(){
             $("#step4").show();
             $("#step5").hide();
-        });
-
-        $("#frmClinicalDataStep5Next").click(function(){
-            $("#step5").hide();
-            $("#step6").show();
-        });
-
-        $("#frmClinicalDataStep6Previous").click(function(){
-            $("#step6").hide();
-            $("#step5").show();
         });
 
     });
@@ -1129,6 +1035,100 @@ if (isset($bAlert) && !empty($bAlert)){
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Modify/Add Clinical Decision Data (WIZARD) ONLY FOR GOLDEN USERS-->
+<div id="modalClinicalDicision" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Clinical Decision</h4>
+            </div>
+            <div class="modal-body">
+                <?php echo form_open('clinicaldecisiondata'); ?>
+                <input type="hidden" name="frmClinicalDecisionData_ead" class="form-control" value="<?php echo $aPatient->ead; ?>" >
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Maxilla-advancement (mm):</label>
+                            <input type="number" name="frmClinicalDecisionData_maxilla_advancement" class="form-control" value="<?php echo $aPatient->maxilla_advancement  ; ?>" >
+                        </div>
+                        <div class="form-group">
+                            <label>Pieces (1/3):</label>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="1">1 piece</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="2">2 pieces</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="3">3 pieces</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="no">No</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Anterior (intrusion/extrusion):</label>
+                            <!--<div class="radio">
+                                <label><input type="radio" name="frmClinicalData_maxilla_anterior" value="intrusion">Intrusion</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalData_maxilla_anterior" value="extrusion">Extrusion</label>
+                            </div>-->
+                            <input type="text" name="frmClinicalDecisionData_maxilla_anterior" class="form-control" value="<?php echo $aPatient->maxilla_anterior  ; ?>" placeholder="extrusion 3 mm">
+                        </div>
+                        <div class="form-group">
+                            <label>Posterior (intrusion/extrusion):</label>
+                            <!--<div class="radio">
+                                <label><input type="radio" name="frmClinicalData_maxilla_posterior" value="intrusion">Intrusion</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalData_maxilla_posterior" value="extrusion">Extrusion</label>
+                            </div>-->
+                            <input type="text" name="frmClinicalDecisionData_maxilla_posterior" class="form-control" value="<?php echo $aPatient->maxilla_posterior   ; ?>" placeholder="extrusion 3 mm">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Midline rotation (no/rotation to...):</label>
+                            <input type="text" name="frmClinicalDecisionData_maxilla_midline_rotation" class="form-control" value="<?php echo $aPatient->maxilla_midline_rotation    ; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Mandible-advancement/setback (advancement/setback):</label>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_mandible_advancement_setback" value="advancement" <?php if($aPatient->gummy_smile_posterieur =='advancement'){ echo "checked";}; ?>>Advancement</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_mandible_advancement_setback" value="setback" <?php if($aPatient->gummy_smile_posterieur =='setback'){ echo "checked";}; ?>>Setback</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="frmClinicalDecisionData_mandible_advancement_setback" value="no" <?php if($aPatient->gummy_smile_posterieur =='no'){ echo "checked";}; ?>>No</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Chin-advancement/setback (mm):</label>
+                            <input type="number" name="frmClinicalDecisionData_chin_advancement" class="form-control" value="<?php echo $aPatient->chin_advancement; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Chin-intrusion/extrusion:</label>
+                            <input type="number" name="frmClinicalDecisionData_chin_intrusion_extrusion" class="form-control" value="<?php echo $aPatient->chin_intrusion_extrusion; ?>" placeholder="extrusion 3 mm">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-10  col-md-offset-1 form-group" style="width: 80%; margin-top: 15px;">
+                        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit" id="frmClinicalDecisionDataSubmit" />
+                    </div>
+                </div>
+                </form>
+
             </div>
         </div>
     </div>

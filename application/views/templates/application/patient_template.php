@@ -32,29 +32,29 @@ if (isset($bAlert) && !empty($bAlert)){
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-2 col-xs-8 col-sm-3 col-lg-2">
-                </div>
-                <div class="col-md-10 col-xs-12 col-sm-9 col-lg-8" >
-                    <table>
+
+
+                <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" >
+                    <table style="margin:auto;text-align: center;">
                         <tr>
                             <td style="padding-right: 50px;">EAD:</td>
-                            <td><?php echo $aPatient->ead; ?></td>
+                            <td><strong><?php echo $aPatient->ead; ?></strong></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Firstname:</td>
-                            <td><?php echo $aPatient->firstname; ?></td>
+                            <td><strong><?php echo $aPatient->firstname; ?></strong></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Lastname:</td>
-                            <td><?php echo $aPatient->lastname; ?></td>
+                            <td><strong><?php echo $aPatient->lastname; ?></strong></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Gender:</td>
-                            <td><?php echo $aPatient->gender; ?></td>
+                            <td><strong><?php echo $aPatient->gender; ?></strong></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Age:</td>
-                            <td><?php
+                            <?php
                                 $dateTime = new DateTime( $aPatient->birthdate);
                                 if ( empty($dateTime->format('Y'))){
                                     $iAge="unknown";
@@ -62,11 +62,11 @@ if (isset($bAlert) && !empty($bAlert)){
                                 else{
                                     $iAge = date("Y") - $dateTime->format('Y') - 1;
                                 }
-                                echo "<td>" . $iAge . "</td>"; ?></td>
+                                echo "<td><strong>" . $iAge . "</strong></td>"; ?></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Notes:</td>
-                            <td><?php echo $aPatient->notes; ?></td>
+                            <td><strong><?php echo $aPatient->notes; ?></strong></td>
                         </tr>
                     </table>
 
@@ -610,23 +610,23 @@ if (isset($bAlert) && !empty($bAlert)){
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Dental OK (mm):</label>
-                                <input type="number" name="frmClinicalData_dental_ok" class="form-control" value="<?php echo $aPatient->dental_ok  ; ?>">
+                                <input type="text" name="frmClinicalData_dental_ok" class="form-control" value="<?php echo $aPatient->dental_ok  ; ?>">
                             </div>
                             <div class="form-group">
                                 <label>Skeletal OK (mm):</label>
-                                <input type="number" name="frmClinicalData_skeletal_ok" class="form-control" value="<?php echo $aPatient->skeletal_ok  ; ?>">
+                                <input type="text" name="frmClinicalData_skeletal_ok" class="form-control" value="<?php echo $aPatient->skeletal_ok  ; ?>">
                             </div>
                             <div class="form-group">
                                 <label>Dental BK (mm):</label>
-                                <input type="number" name="frmClinicalData_dental_bk" class="form-control" value="<?php echo $aPatient->dental_bk ; ?>">
+                                <input type="text" name="frmClinicalData_dental_bk" class="form-control" value="<?php echo $aPatient->dental_bk ; ?>">
                             </div>
                             <div class="form-group">
                                 <label>Skeletal BK (mm):</label>
-                                <input type="number" name="frmClinicalData_skeletal_bk" class="form-control" value="<?php echo $aPatient->skeletal_bk  ; ?>">
+                                <input type="text" name="frmClinicalData_skeletal_bk" class="form-control" value="<?php echo $aPatient->skeletal_bk  ; ?>">
                             </div>
                             <div class="form-group">
                                 <label>Deviation midline chin (mm):</label>
-                                <input type="number" name="frmClinicalData_deviation_midline_chin" class="form-control" value="<?php echo $aPatient->deviation_midline_chin  ; ?>" >
+                                <input type="text" name="frmClinicalData_deviation_midline_chin" class="form-control" value="<?php echo $aPatient->deviation_midline_chin  ; ?>" >
                             </div>
                             <div class="form-group">
                                 <label>Fullness lips (thin/normal/full):</label>
@@ -991,7 +991,7 @@ if (isset($bAlert) && !empty($bAlert)){
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Radiograph Analyze Data (excel)</h4>
+                <h4 class="modal-title">Radiograph Analyze Data (Excel)</h4>
             </div>
             <div class="modal-body">
                 <h4>Upload Data</h4>

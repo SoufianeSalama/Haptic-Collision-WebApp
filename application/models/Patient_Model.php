@@ -78,15 +78,6 @@ class Patient_Model extends CI_Model
         $this->form_validation->set_rules('frmClinicalData_transverse_relation', 'Patient Transverse relation', 'trim');
         $this->form_validation->set_rules('frmClinicalData_face_length_ratio', 'Patient Face length ratio', 'trim');
         $this->form_validation->set_rules('frmClinicalData_profile', 'Patient Profile', 'trim');
-        // Step 5
-        /*$this->form_validation->set_rules('frmClinicalData_maxilla_advancement', 'Patient Maxilla-advancement', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_maxilla_pieces', 'Patient Maxilla pieces', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_maxilla_anterior', 'Patient Maxilla anterior', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_maxilla_posterior', 'Patient Maxilla posterior', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_maxilla_midline_rotation', 'Patient Maxilla midline rotation', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_mandible_advancement_setback', 'Patient Mandible-advancement/setback', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_chin_advancement', 'Patient Chin-advancement/setback', 'trim');
-        $this->form_validation->set_rules('frmClinicalData_chin_intrusion_extrusion', 'Patient Chin-intrusion/extrusion', 'trim');*/
 
         // Step 6
         $this->form_validation->set_rules('frmClinicalData_notes', 'Patient Notes', 'trim');
@@ -458,6 +449,17 @@ class Patient_Model extends CI_Model
     public function saveFileName($sPatientEAD, $sFileName){
         $sql = "UPDATE patients SET excel_filename = ? WHERE ead = ? ";
         $this->db->query($sql, array($sFileName,$sPatientEAD ));
+    }
+
+    public function getFileName($sPatientEAD){
+        try{
+            $sql = "SELECT excel_filename FROM patients WHERE ead = ?";
+            $aResult = $this->db->query($sql, array($sPatientEAD));
+            return $aResult->result()[0]->excel_filename;
+        }
+        catch (Exception $e){
+            return false;
+        }
     }
 
     public function newPatientCheckEad($sEad){

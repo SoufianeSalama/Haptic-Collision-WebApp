@@ -50,6 +50,73 @@ class Welcome extends CI_Controller {
         }
     }
 
+    public function loginAuthenticationView($sUsername = null, $sPassword =null){
+        if ($this->checkSession()){
+            header( "Location: ./mypatients" );
+        }else {
+            require_once "./application/third_party/GoogleAuthenticator/GoogleAuthenticator.php";
+
+            $oGoogleAuth = new GoogleAuthenticator();
+
+            if (!isset($_SESSION["auth_secret"])) {
+                $secret = $oGoogleAuth->createSecret();
+                $_SESSION["auth_secret"] = $secret;
+            }
+
+            $QRcode = $oGoogleAuth->getQRCodeGoogleUrl('HapticCollision', $_SESSION["auth_secret"]);
+            $aData["sGoogleAuthQRSrc"] = $QRcode;
+            $aData["sPatientUsername"] = $sUsername;
+            $aData["sPatientPassword"] = $sPassword;
+            $sTemplateHome = $this->load->view('templates/welcome/login_twofactor_template', $aData, true);
+            $this->showView($sTemplateHome, "Login Authentication");
+        }
+
+    }
+
+    public function loginAuthenticationForm(){
+        if ($this->checkSession()){
+            header( "Location: ./mypatients" );
+        }else {
+            $this->form_validation->set_rules('frmLoginAuthenticationCode', 'Authentication Code', 'required|trim|callback_loginAuthentication');
+            $this->form_validation->set_rules('frmLoginAuthenticationPatientUsername', '', 'required');
+            $this->form_validation->set_rules('frmLoginAuthenticationPatientPassword', '', 'required');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->loginAuthenticationView();
+            } else
+            {
+                $this->load->model("User_Model");
+                $aUser = $this->User_Model->loginUserCheck(trim($this->input->post('frmLoginAuthenticationPatientUsername')), trim($this->input->post('frmLoginAuthenticationPatientPassword')));
+                if (isset($aUser) && !empty($aUser) ){
+                    $aLoggedInUser = array(
+                        'username'  => $aUser->username,
+                        'userid'    => $aUser->userid,
+                        'firstname' => $aUser->firstname,
+                        'lastname'  => $aUser->lastname,
+                        'email'     => $aUser->email,
+                        'userlevel' => $aUser->userlevel,
+                        'logged_in' => TRUE
+                    );
+
+                    $this->session->set_userdata($aLoggedInUser);
+                    header("Location: ./mypatients");
+                }
+
+                header("Location: ./");
+            }
+        }
+    }
+
+    public function loginAuthentication(){
+        require_once "./application/third_party/GoogleAuthenticator/GoogleAuthenticator.php";
+
+        $oGoogleAuth = new GoogleAuthenticator();
+
+        $sAuthenticationCode = $this->input->post('frmLoginAuthenticationCode');
+        $bResult = $oGoogleAuth->verifyCode($_SESSION["auth_secret"], $sAuthenticationCode, 2);
+        return $bResult;
+    }
+
     public function loginUserForm(){
         if ($this->checkSession()){
             header( "Location: ./mypatients" );
@@ -59,10 +126,10 @@ class Welcome extends CI_Controller {
 
             if ($this->form_validation->run() == FALSE) {
                 $this->loginView();
-            } else {
+            } else
+            {
                 // Get userdata: name, userlevel
-                $aUser = $this->User_Model->loginUserCheck(trim($this->input->post('frmLoginUsername')), trim($this->input->post('frmLoginPassword')));
-                var_dump($aUser);
+                /*$aUser = $this->User_Model->loginUserCheck(trim($this->input->post('frmLoginUsername')), trim($this->input->post('frmLoginPassword')));
 
                 $aLoggedInUser = array(
                     'username' => $aUser->username,
@@ -74,8 +141,10 @@ class Welcome extends CI_Controller {
                     'logged_in' => TRUE
                 );
 
-                $this->session->set_userdata($aLoggedInUser);
-                header("Location: ./mypatients");
+                $this->session->set_userdata($aLoggedInUser);*/
+
+                //header("Location: ./mypatients");
+                $this->loginAuthenticationView(trim($this->input->post('frmLoginUsername')), trim($this->input->post('frmLoginPassword')));
             }
         }
     }
@@ -104,45 +173,60 @@ class Welcome extends CI_Controller {
         if ($this->checkSession()){
             header( "Location: ./mypatients" );
         }else {
-            $this->form_validation->set_rules('frmRegisterFirstName', 'Firstname', 'required|trim|alpha');
-            $this->form_validation->set_rules('frmRegisterLastName', 'Lastname', 'required|trim|alpha');
-            $this->form_validation->set_rules('frmRegisterEmail', 'Email', 'required|trim|valid_email|callback_email_check');
-            $this->form_validation->set_rules('frmRegisterFunction', 'Function', 'required|trim|alpha');
-            $this->form_validation->set_rules('frmRegisterWorkplace', 'Workplace', 'required|trim|alpha');
-            $this->form_validation->set_rules('frmRegisterCountry', 'Country', 'required|trim|alpha');
-            $this->form_validation->set_rules('frmRegisterPhone', 'Phone', 'required|trim|numeric');
-            $this->form_validation->set_rules('frmRegisterSurgicalExperience', 'Surgical experience', 'required|trim');
-            $this->form_validation->set_rules('frmRegisterPassword', 'Password', 'required|trim|matches[frmRegisterConfirmPassword]');
-            $this->form_validation->set_rules('frmRegisterConfirmPassword', '¨Password confirmation', 'required|trim');
+            if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+                $secret = 'Google Captcha secret';
+                //get verify response data
+                $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . $_POST['g-recaptcha-response']);
+                $responseData = json_decode($verifyResponse);
 
-            $this->form_validation->set_rules('frmRegisterUsername', 'Username', 'required|trim|callback_username_check');
+                if ($responseData->success) {
+                    $this->form_validation->set_rules('frmRegisterFirstName', 'Firstname', 'required|trim|alpha');
+                    $this->form_validation->set_rules('frmRegisterLastName', 'Lastname', 'required|trim|alpha');
+                    $this->form_validation->set_rules('frmRegisterEmail', 'Email', 'required|trim|valid_email|callback_email_check');
+                    $this->form_validation->set_rules('frmRegisterFunction', 'Function', 'required|trim|alpha');
+                    $this->form_validation->set_rules('frmRegisterWorkplace', 'Workplace', 'required|trim|alpha');
+                    $this->form_validation->set_rules('frmRegisterCountry', 'Country', 'required|trim|alpha');
+                    $this->form_validation->set_rules('frmRegisterPhone', 'Phone', 'required|trim|numeric');
+                    $this->form_validation->set_rules('frmRegisterSurgicalExperience', 'Surgical experience', 'required|trim');
+                    $this->form_validation->set_rules('frmRegisterPassword', 'Password', 'required|trim|matches[frmRegisterConfirmPassword]');
+                    $this->form_validation->set_rules('frmRegisterConfirmPassword', '¨Password confirmation', 'required|trim');
 
-            if ($this->form_validation->run() == FALSE) {
-                $this->registerView();
-            } else {
-                $aUserData = array(
-                    "firstname" => strtoupper($this->input->post('frmRegisterFirstName')),
-                    "lastname" => strtoupper($this->input->post('frmRegisterLastName')),
-                    "email" => $this->input->post('frmRegisterEmail'),
-                    "function" => strtoupper($this->input->post('frmRegisterFunction')),
-                    "workplace" => strtoupper($this->input->post('frmRegisterWorkplace')),
-                    "country" => strtoupper($this->input->post('frmRegisterCountry')),
-                    "phone" => $this->input->post('frmRegisterPhone'),
-                    "surgical_experience" => $this->input->post('frmRegisterSurgicalExperience'),
-                    "username" => $this->input->post('frmRegisterUsername'),
-                    "password" => password_hash($this->input->post('frmRegisterPassword'), PASSWORD_DEFAULT),
-                    "userlevel" => 0,
-                    "approved" => 0
-                );
-                $this->load->model("User_Model");
+                    $this->form_validation->set_rules('frmRegisterConfirmPassword', '¨Password confirmation', 'required|trim');
 
-                if ($this->User_Model->registerNewUser($aUserData)) {
-                    $this->loginView(true);
-                } else {
-                    $this->registerView();
+                    $this->form_validation->set_rules('frmRegisterUsername', 'Username', 'required|trim|callback_username_check');
+
+                    $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'requiredk');
+
+                    if ($this->form_validation->run() == FALSE) {
+                        $this->registerView();
+                    } else {
+                        $aUserData = array(
+                            "firstname" => strtoupper($this->input->post('frmRegisterFirstName')),
+                            "lastname" => strtoupper($this->input->post('frmRegisterLastName')),
+                            "email" => $this->input->post('frmRegisterEmail'),
+                            "function" => strtoupper($this->input->post('frmRegisterFunction')),
+                            "workplace" => strtoupper($this->input->post('frmRegisterWorkplace')),
+                            "country" => strtoupper($this->input->post('frmRegisterCountry')),
+                            "phone" => $this->input->post('frmRegisterPhone'),
+                            "surgical_experience" => $this->input->post('frmRegisterSurgicalExperience'),
+                            "username" => $this->input->post('frmRegisterUsername'),
+                            "password" => password_hash($this->input->post('frmRegisterPassword'), PASSWORD_DEFAULT),
+                            "userlevel" => 0,
+                            "approved" => 0
+                        );
+                        $this->load->model("User_Model");
+
+                        if ($this->User_Model->registerNewUser($aUserData)) {
+                            $this->loginView(true);
+                        } else {
+                            $this->registerView();
+                        }
+                    }
+
                 }
             }
         }
+
     }
 
 

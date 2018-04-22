@@ -10,12 +10,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Google reCaptcha -->
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <style>
+        /*Google reCaptcha*/
+        #googlecaptcha > div {
+            margin: auto;
+        }
+    </style>
     <title>
         <?php
         echo $sTemplateName;
         ?>
     </title>
 </head>
+
 <body>
 
 <div class="container" style="margin-top: 80px;">

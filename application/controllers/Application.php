@@ -47,8 +47,7 @@ class Application extends CI_Controller {
 
             if (empty($aResult->result())) {
                 //if ($aPatient == null){
-                $aData["heading"] = "Haptic Collision Webapplication ERROR: Patient not found!";
-                $aData["message"] = "";
+                $aData["message"] = "Patient not found! <br/> ERROR NUMBER: 1";
                 $this->load->view('errors/html/error_general', $aData);
             } else {
                 $aData["aPatient"] = $aResult->result()[0];
@@ -88,8 +87,8 @@ class Application extends CI_Controller {
             if ($this->Patient_Model->clinicalMeasurementsDataFormVal()) {
                 $this->patientProfileView($this->input->post('frmClinicalData_ead'), true);
             } else {
-                $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with modifying Clinical Measurements data!";
-                $aData["message"] = "error nr. 5";
+                $aData["heading"] = "Haptic Collision Webapplication ERROR:";
+                $aData["message"] = " Problem with modifying Clinical Measurements data! <br/> ERROR NUMBER: 5";
                 $this->load->view('errors/html/error_general', $aData);
             }
         }
@@ -103,8 +102,7 @@ class Application extends CI_Controller {
             if ($this->Patient_Model->clinicalDecisionDataFormVal()) {
                 $this->patientProfileView($this->input->post('frmClinicalDecisionData_ead'), true);
             } else {
-                $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with modifying Clinical Decision data!";
-                $aData["message"] = "error nr. 6";
+                $aData["message"] = "Problem with modifying Clinical Decision data! <br/> ERROR NUMBER: 6";
                 $this->load->view('errors/html/error_general', $aData);
             }
         }
@@ -142,24 +140,33 @@ class Application extends CI_Controller {
                         $this->patientProfileView($sPatientEAD, true);
                     } else {
                         // Error saving data
-                        $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with saving the Radiograph Analyze data in DB!";
-                        $aData["message"] = "error nr. 6";
+                        $aData["message"] = "Problem with saving the Radiograph Analyze data in DB!  <br />ERROR NUMBER: 6";
                         $this->load->view('errors/html/error_general', $aData);
                     }
                 } else {
                     // Error parsing data
-                    $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with parsing the Radiograph Analyze excel file!";
-                    $aData["message"] = "error nr. 7";
+                    $aData["message"] = "Problem with parsing the Radiograph Analyze excel file! <br />ERROR NUMBER: 7";
                     $this->load->view('errors/html/error_general', $aData);
                 }
             } else {
                 // Error uploading data
-                $aData["heading"] = "Haptic Collision Webapplication ERROR: Problem with uploading the Radiograph Analyze excel file!";
-                $aData["message"] = "error nr. 8";
+                $aData["message"] = "Problem with uploading the Radiograph Analyze excel file! <br/>ERROR NUMBER: 8";
                 $this->load->view('errors/html/error_general', $aData);
             }
         }
 
+    }
+
+    public function downloadRadiographAnalyzedata(){
+        if (!$this->checkSession()){
+            header( "Location: ./" );
+        }else {
+            $sPatientEAD = $this->input->post('frmDownloadDataEAD');
+
+            $this->load->model('Patient_Model');
+            $sFileName = $this->Patient_Model->getFileName($sPatientEAD);
+            downloadExcelData($sFileName); // ExcelData_Helper
+        }
     }
 
     public function newPatientForm(){
@@ -198,8 +205,7 @@ class Application extends CI_Controller {
                 if ($this->Patient_Model->newPatient($aPatient, $iDocter_id)) {
                     $this->myPatientsView(true);
                 } else {
-                    $aData["heading"] = "Haptic Collision Webapplication ERROR: Patient is not added!";
-                    $aData["message"] = "15";
+                    $aData["message"] = "Patient is not added!<br/> ERROR NUMBER: 15";
                     $this->load->view('errors/html/error_general', $aData);
                 }
                 return true;
@@ -228,8 +234,7 @@ class Application extends CI_Controller {
         if ($this->User_Model->modifyUser($aUser)){
             $this->userSettingsView(true);
         }else{
-            $aData["heading"] = "Haptic Collision Webapplication ERROR: User is not modified!";
-            $aData["message"] = "15";
+            $aData["message"] = "User is not modified! <br/> ERROR NUMBER: 25";
             $this->load->view('errors/html/error_general', $aData);
         }
 
@@ -241,8 +246,7 @@ class Application extends CI_Controller {
         if ($this->User_Model->deleteUser($sUserId)){
             $this->userSettingsView(true);
         }else{
-            $aData["heading"] = "Haptic Collision Webapplication ERROR: User is not deleted!";
-            $aData["message"] = "16";
+            $aData["message"] = "User is not deleted! <br/> ERROR NUMBER: 26";
             $this->load->view('errors/html/error_general', $aData);
         }
     }

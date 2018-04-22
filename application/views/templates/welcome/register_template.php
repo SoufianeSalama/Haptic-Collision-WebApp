@@ -1,3 +1,10 @@
+<script>
+    document.getElementById("frmRegisterSubmit").disabled = true;
+    function enableSubmitBtn(){
+        document.getElementById("frmRegisterSubmit").disabled = false;
+    }
+</script>
+
 <div class="panel panel-default" style="max-width: 500px; margin: auto;">
     <div class="panel-heading">
         Haptic Collision Webinterface
@@ -350,9 +357,15 @@
                         <input type="password" name="frmRegisterConfirmPassword"  id="exampleFormControlInput1" class="form-control"  value="<?php echo set_value('frmRegisterConfirmPassword'); ?>" >
                     </div>
 
+                    <div class="form-group" style="width: 100%; margin-top: 15px; margin:auto;">
+                        <div class="g-recaptcha" id="googlecaptcha" data-sitekey="6LdMqlQUAAAAAChQUmeX_yHKj4PUjDmCMW1KhSUk" data-callback="enableSubmitBtn">
+                        </div>
+                    </div>
+
+                    <br/>
 
                     <div class="form-group">
-                        <input name="frmRegisterSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Create account">
+                        <input name="frmRegisterSubmit" id="frmRegisterSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Create account">
                     </div>
 
                 </div>

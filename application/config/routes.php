@@ -57,6 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route["login"] = "welcome";
 $route["register"] = "welcome/registerView";
 $route["password"] = "welcome/passwordForgotView";
+$route['loginauth'] = "welcome/loginAuthenticationView";
 
 // WELCOME FORMS
 $route["frmregister"] = "welcome/registerUserForm";
@@ -71,11 +72,13 @@ $route["logout"] = "application/userLogout";
 // APPLICATION FORMS
 $route["clinicalmeasdata"] = "application/clinicalMeasDataForm";
 $route['newpatient'] = "application/newPatientForm";
+$route["modifyuser"] = "application/modifyUserForm";
+$route["deleteuser"] = "application/deleteUserForm";
 
-// APPLICATION UPLOAD DATA
+// APPLICATION UPLOAD/DOWNLOAD DATA
 $route["upload"] = "application/radiographAnalyzeData";
+$route["download"] = "application/downloadRadiographAnalyzedata";
 
 
-// Test
-$route["test"] = "application/setBirthday";
 
+$route["frmloginauthentication"] = "welcome/loginAuthenticationForm";

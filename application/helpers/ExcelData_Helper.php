@@ -8,12 +8,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Time: 18:40
  */
 
+if ( !function_exists("downloadExcelData")){
+    function downloadExcelData($sFileName){
+        try{
+            $CI =& get_instance();
+            $CI->load->helper('download');
+            force_download("./uploads/" . $sFileName, NULL);
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+}
+
 if ( !function_exists("uploadExcelData"))
 {
     function uploadExcelData(){
         $config['upload_path']          = './uploads/';
         $config['allowed_types']        = 'xlsx';
         $config['max_size']             = 100;
+        $config['overwrite']             = TRUE;
 
         $CI =& get_instance();
         $CI->load->library('upload', $config);

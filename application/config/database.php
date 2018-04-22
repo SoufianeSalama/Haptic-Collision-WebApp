@@ -79,6 +79,15 @@ $db['default'] = array(
 	'username' => 'root',
 	'password' => '',
 	'database' => 'haptic_collision',
+    'ssl_set' => true,
+    'ssl_key' => NULL,
+    'ssl_cert' => NULL,
+    'ssl_set' => true,
+    //'ssl_ca' => realpath('./application/third_party/ssl/BaltimoreCyberTrustRoot.crt.pem'),
+    'ssl_capath' => realpath('./application/third_party/ssl/BaltimoreCyberTrustRoot.crt.pem'),
+    //'ssl_capath' => NULL,
+    'ssl_cipher' => NULL,
+
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -86,11 +95,13 @@ $db['default'] = array(
 	'cache_on' => FALSE,
 	'cachedir' => '',
 	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
+	//'dbcollat' => 'utf8_general_ci',
+	'dbcollat' => '',
 	'swap_pre' => '',
 	'encrypt' => FALSE,
 	'compress' => FALSE,
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
+
 );

@@ -67,6 +67,18 @@ class User_Model extends CI_Model
         else{ return false;}
     }
 
+    public function updateSecret($sUsername, $sAuth_Secret){
+        $sSQL = "UPDATE users SET auth_secret = ? WHERE username = ?";
+        try{
+            $this->db->query($sSQL, array($sAuth_Secret ,$sUsername));
+        }
+        catch (Exception $e){
+            return false;
+        }
+        return true;
+
+    }
+
     public function getAllUsers(){
         try{
             $sql = "SELECT * FROM users WHERE userlevel BETWEEN  ? AND ?";

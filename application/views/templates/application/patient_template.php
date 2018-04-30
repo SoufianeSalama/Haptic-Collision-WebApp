@@ -10,6 +10,20 @@ if (isset($bAlert) && !empty($bAlert)){
     }
 }
 ?>
+<script>
+    //$( ".loader" ).addClass( "off" );
+    //$( "body" ).css("background-color", "red");
+    function runAlgorithm(patientEAD){
+
+        $('#modalAlgorithm').modal('show');
+        //$( ".loader" ).removeClass( "off" );
+        $.get('<?php echo base_url() ?>algorithm', { patientead: patientEAD }, function(data) {
+            console.log(data);
+            $( ".loader" ).css("display", "none");
+
+        });
+    }
+</script>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -27,6 +41,8 @@ if (isset($bAlert) && !empty($bAlert)){
                         <?php
                     }
                     ?>
+                    <button type="button" class="btn btn-sm btn-info btn-create btn-showform" onclick="runAlgorithm('<?php echo $aPatient->ead; ?>')">Run Algorithm</button>
+
                 </div>
             </div>
         </div>
@@ -265,10 +281,10 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <td><?php echo $aPatient->i1i_mp ; ?></td>
 
                                 <td>6u-NF:</td>
-                                <td><?php echo "ERROR"/*$aPatient->6u_nf*/ ; ?></td>
+                                <td><?php echo $aPatient->d_6u_nf ; ?></td>
 
                                 <td>6l-MP:</td>
-                                <td><?php echo "ERROR" /*$aPatient->6l_mp*/ ; ?></td>
+                                <td><?php echo $aPatient->d_6l_mp ; ?></td>
                             </tr>
 
                             <tr>
@@ -310,12 +326,12 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <td><?php echo $aPatient->go_me ; ?></td>
 
                                 <td>Overjet:</td>
-                                <td><?php echo "Difference?"/*$aPatient->overjet*/ ; ?></td>
+                                <td><?php echo $aPatient->overjet2 ; ?></td>
                             </tr>
 
                             <tr>
                                 <td>Overbite:</td>
-                                <td><?php echo "Difference?"/*$aPatient->overbite*/ ; ?></td>
+                                <td><?php echo $aPatient->overbite2 ; ?></td>
 
                                 <td>Go-Me:N-S:</td>
                                 <td><?php echo $aPatient->go_me_n_s  ; ?></td>
@@ -409,15 +425,15 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <td><?php echo $aPatient->b_pogmp  ; ?></td>
 
                                 <td>1u-NPog:</td>
-                                <td><?php echo "ERROR"/*$aPatient->1u_npog*/  ; ?></td>
+                                <td><?php echo $aPatient->d_1u_npog; ?></td>
                             </tr>
 
                             <tr>
                                 <td>1u-APog:</td>
-                                <td><?php echo "ERROR"/*$aPatient->1u_apog*/  ; ?></td>
+                                <td><?php echo $aPatient->d_1u_apog ; ?></td>
 
                                 <td>1l-NPog:</td>
-                                <td><?php echo "ERROR"/*$aPatient->1l_npog*/   ; ?></td>
+                                <td><?php echo $aPatient->d_1l_npog  ; ?></td>
 
                                 <td>Ls-NsPog':</td>
                                 <td><?php echo $aPatient->ls_nspog   ; ?></td>
@@ -428,10 +444,10 @@ if (isset($bAlert) && !empty($bAlert)){
 
                             <tr>
                                 <td>Pog'-Gl'Sn/Sn12°:</td>
-                                <td><?php echo "ERROR"/*$aPatient->1u_apog*/  ; ?></td>
+                                <td><?php echo $aPatient->d_1u_apog ; ?></td>
 
                                 <td>SnPerp-Ls:</td>
-                                <td><?php echo "ERROR"/*$aPatient->1l_npog*/   ; ?></td>
+                                <td><?php echo $aPatient->d_1l_npog  ; ?></td>
 
                                 <td>SnPerp-Li:</td>
                                 <td><?php echo $aPatient->ls_nspog   ; ?></td>

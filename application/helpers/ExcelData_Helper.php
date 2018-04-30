@@ -79,7 +79,7 @@ if ( !function_exists("worksheetReader"))
                     $oRadiographAnalyze->i_i1i_mp = $dMeasurementValue;
                     break;
                 case "6u-NF":
-                    $oRadiographAnalyze->i_6u_nf = $dMeasurementValue;
+                    $oRadiographAnalyze->d_6u_nf = $dMeasurementValue;
                     break;
                 case "6l-MP":
                     $oRadiographAnalyze->d_6l_mp = $dMeasurementValue;
@@ -118,10 +118,10 @@ if ( !function_exists("worksheetReader"))
                     $oRadiographAnalyze->d_go_me = $dMeasurementValue;
                     break;
                 case "overjet":
-                    $oRadiographAnalyze->d_overjet = $dMeasurementValue;
+                    $oRadiographAnalyze->d_overjet2 = $dMeasurementValue;
                     break;
                 case "overbite":
-                    $oRadiographAnalyze->d_overbite = $dMeasurementValue;
+                    $oRadiographAnalyze->d_overbite2 = $dMeasurementValue;
                     break;
                 case "Go-Me:N-S":
                     $oRadiographAnalyze->d_go_me_n_s = $dMeasurementValue;

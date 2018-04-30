@@ -58,6 +58,7 @@ $route["login"] = "welcome";
 $route["register"] = "welcome/registerView";
 $route["password"] = "welcome/passwordForgotView";
 $route['loginauth'] = "welcome/loginAuthenticationView";
+$route["frmloginauthentication"] = "welcome/loginAuthenticationForm";
 
 // WELCOME FORMS
 $route["frmregister"] = "welcome/registerUserForm";
@@ -79,6 +80,5 @@ $route["deleteuser"] = "application/deleteUserForm";
 $route["upload"] = "application/radiographAnalyzeData";
 $route["download"] = "application/downloadRadiographAnalyzedata";
 
-
-
-$route["frmloginauthentication"] = "welcome/loginAuthenticationForm";
+// API
+$route["algorithm"] = "api/runAlgorithm";

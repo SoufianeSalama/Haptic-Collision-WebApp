@@ -11,7 +11,7 @@ class RadiographAnalyze
     public $sEad;
     public $i_i1u_nf;
     public $i_i1i_mp;
-    public $i_6u_nf;
+    public $d_6u_nf;
     public $d_6l_mp;
     public $d_ans_pns;
     public $d_n_ans;
@@ -24,8 +24,8 @@ class RadiographAnalyze
     public $d_s_ar;
     public $d_ar_go_2;
     public $d_go_me;
-    public $d_overjet;
-    public $d_overbite;
+    public $d_overjet2;
+    public $d_overbite2;
     public $d_go_me_n_s;
     public $d_s_go_n_me;
     public $d_ufh_lfh;

@@ -55,14 +55,19 @@ class Welcome extends CI_Controller {
             header( "Location: ./mypatients" );
         }else {
             require_once "./application/third_party/GoogleAuthenticator/GoogleAuthenticator.php";
-
             $oGoogleAuth = new GoogleAuthenticator();
+            $this->load->model("User_Model");
 
-            if (!isset($_SESSION["auth_secret"])) {
-                $secret = $oGoogleAuth->createSecret();
-                $_SESSION["auth_secret"] = $secret;
+            $aUser = $this->User_Model->loginUserCheck($sUsername, $sPassword);
+            if (!($aUser == false)) {
+                if (!empty($aUser->auth_secret) && isset($aUser->auth_secret)) {
+                    $_SESSION["auth_secret"] = $aUser->auth_secret;
+                } else {
+                    $secret = $oGoogleAuth->createSecret();
+                    $_SESSION["auth_secret"] = $secret;
+                    $this->User_Model->updateSecret($sUsername, $secret);
+                }
             }
-
             $QRcode = $oGoogleAuth->getQRCodeGoogleUrl('HapticCollision', $_SESSION["auth_secret"]);
             $aData["sGoogleAuthQRSrc"] = $QRcode;
             $aData["sPatientUsername"] = $sUsername;
@@ -106,7 +111,9 @@ class Welcome extends CI_Controller {
             }
         }
     }
-
+    /*
+     * Callback loginAuthentication
+     */
     public function loginAuthentication(){
         require_once "./application/third_party/GoogleAuthenticator/GoogleAuthenticator.php";
 
@@ -128,22 +135,6 @@ class Welcome extends CI_Controller {
                 $this->loginView();
             } else
             {
-                // Get userdata: name, userlevel
-                /*$aUser = $this->User_Model->loginUserCheck(trim($this->input->post('frmLoginUsername')), trim($this->input->post('frmLoginPassword')));
-
-                $aLoggedInUser = array(
-                    'username' => $aUser->username,
-                    'userid' => $aUser->userid,
-                    'firstname' => $aUser->firstname,
-                    'lastname' => $aUser->lastname,
-                    'email' => $aUser->email,
-                    'userlevel' => $aUser->userlevel,
-                    'logged_in' => TRUE
-                );
-
-                $this->session->set_userdata($aLoggedInUser);*/
-
-                //header("Location: ./mypatients");
                 $this->loginAuthenticationView(trim($this->input->post('frmLoginUsername')), trim($this->input->post('frmLoginPassword')));
             }
         }
@@ -228,7 +219,6 @@ class Welcome extends CI_Controller {
         }
 
     }
-
 
     public function email_check($sEmail){
         $this->load->model("User_Model");

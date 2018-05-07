@@ -67,16 +67,19 @@ class User_Model extends CI_Model
         }
         else{ return false;}
     }
-
+	
 	public function resetPassword($aResetData){
         try {
+			echo "token: ".$aResetData["token"];
             $sql = "UPDATE docters SET password = ? WHERE token = ?";
             $this->db->query($sql, array($aResetData["password"], $aResetData["token"]));
+			//$this->db->query($sql, array($aResetData["password"], $token));
+			$this->output->enable_profiler(TRUE);
         }
         catch(Exception $e){
             return false;
         }
         return true;
     }
-
+	
 }

@@ -146,8 +146,8 @@ class Application extends CI_Controller {
         if (!$this->checkSession()){
             header( "Location: ./" );
         }else {
-            $iDocter_id = 1;
-
+            $iDocter_id = $this->session->userdata('userid');
+			
             $this->form_validation->set_rules('frmNewPatientEAD', 'Patient EAD', 'required|callback_patientead_check');
 
             $this->form_validation->set_rules('frmNewPatientFirstName', 'Patient Firstname', 'required',
@@ -171,7 +171,7 @@ class Application extends CI_Controller {
                     "ead" => $this->input->post('frmNewPatientEAD'),
                     "firstname" => strtoupper($this->input->post('frmNewPatientFirstName')),
                     "lastname" => strtoupper($this->input->post('frmNewPatientLastName')),
-                    "birtdate" => $this->input->post('frmNewPatientBirthdate'),
+                    "birthdate" => $this->input->post('frmNewPatientBirthdate'),
                     "gender" => $this->input->post('frmNewPatientGender'),
                 );
                 $this->load->model('Patient_Model');

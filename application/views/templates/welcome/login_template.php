@@ -12,20 +12,20 @@
                 </div>
             </div>
 
-            <div class="row">
-                <?php echo form_open('frmlogin'); ?>
-
-                <?php
-                    if (isset($bAlert) && !empty($bAlert)){
-                        if ($bAlert){
-                            echo '
+            <?php
+            if (isset($bAlert) && !empty($bAlert)){
+                if ($bAlert){
+                    echo '
                                 <div class="col-md-12 alert alert-success alert-dismissable">
-                                     You are <strong>successfully</strong> added to the system, but first the admin has to approve your account.
+                                     You are <strong>successfully</strong> added to the system, check your email to set up the two-factor authentication. The Administator has to approve you before you can login.
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                 </div>';
-                        }
-                    }
-                ?>
+                }
+            }
+            ?>
+
+            <div class="row">
+                <?php echo form_open('frmlogin'); ?>
 
                 <div class="col-sm-12 col-md-10  col-md-offset-1 ">
 

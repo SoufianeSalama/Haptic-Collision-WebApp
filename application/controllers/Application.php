@@ -3,13 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Application extends CI_Controller {
 
-	public function index()
-	{
-		$this->myPatientsView();
-	}
+    public function index()
+    {
+        $this->myPatientsView();
+    }
 
-	private function checkSession(){
-	    return $this->session->userdata('logged_in');
+    private function checkSession(){
+        return $this->session->userdata('logged_in');
     }
 
     private function showView($sTemplateContent, $sTemplateName){
@@ -165,7 +165,8 @@ class Application extends CI_Controller {
 
             $this->load->model('Patient_Model');
             $sFileName = $this->Patient_Model->getFileName($sPatientEAD);
-            downloadExcelData($sFileName); // ExcelData_Helper
+            downloadExcelData($sFileName); // ExcelData_Helper+
+            $this->patientProfileView($sPatientEAD);
         }
     }
 

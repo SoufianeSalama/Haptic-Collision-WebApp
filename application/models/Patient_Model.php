@@ -25,6 +25,7 @@ class Patient_Model extends CI_Model
             $sql = "SELECT * FROM patients 
                     LEFT JOIN clinical_measurements ON patients.ead = clinical_measurements.patient_ead 
                     LEFT JOIN radiograph_analyze ON patients.ead = radiograph_analyze.patient_ead 
+                    LEFT JOIN results_algorithm ON patients.ead = results_algorithm.patient_ead 
                     WHERE patients.ead = ? ";
             $query = $this->db->query($sql, array($sPatientsEAD));
         }catch(SQLiteException $e){
@@ -261,6 +262,7 @@ class Patient_Model extends CI_Model
 
         }
     }
+
     private function addClinicalDecisionData($oClinicalDecision){
         //Check if there's already data of this patient in database
         $sql = "SELECT * FROM clinical_measurements WHERE patient_ead = ?";
@@ -344,8 +346,8 @@ class Patient_Model extends CI_Model
                     $oRadiographAnalyze->d_go_pog , $oRadiographAnalyze->d_ar_pt ,
                     $oRadiographAnalyze->d_pt_n , $oRadiographAnalyze->d_n_s ,
                     $oRadiographAnalyze->d_s_ar , $oRadiographAnalyze->d_ar_go_2,
-                    $oRadiographAnalyze->d_go_me , $oRadiographAnalyze->d_overjet2 ,
-                    $oRadiographAnalyze->d_overbite2,$oRadiographAnalyze->d_go_me_n_s ,
+                    $oRadiographAnalyze->d_go_me , $oRadiographAnalyze->d_overjet ,
+                    $oRadiographAnalyze->d_overbite,$oRadiographAnalyze->d_go_me_n_s ,
                     $oRadiographAnalyze->d_s_go_n_me ,$oRadiographAnalyze->d_ufh_lfh,
                     $oRadiographAnalyze->d_ns_pog,  $oRadiographAnalyze->d_gl_gl ,
                     $oRadiographAnalyze->d_a_sn , $oRadiographAnalyze->d_ls1u_ls ,
@@ -380,7 +382,7 @@ class Patient_Model extends CI_Model
                 // No data of this patient in database
                 $sql = "Insert into radiograph_analyze (
                   patient_ead,i1u_nf,	i1i_mp,	d_6u_nf,	d_6l_mp,	ans_pns,	n_ans,	ans_gn,	ar_go_1,	go_pog,	ar_pt,	pt_n,	n_s,	s_ar,	ar_go_2,	go_me,
-                  overjet2,	overbite2,	go_me_n_s,	s_go_n_me,	ufh_lfh,	ns_pog,	gl_gl,	a_sn,	ls1u_ls,	li1l_li,	b_sm,
+                  overjet,	overbite,	go_me_n_s,	s_go_n_me,	ufh_lfh,	ns_pog,	gl_gl,	a_sn,	ls1u_ls,	li1l_li,	b_sm,
                   pog_pog,	gl_sn,	sn_me,	sn_sto,	sto_me,	lll,	interlab,	cl,	gl_sn_sn_me,	sn_sto_sto_me,	s_go,	n_me,	pns_n,
                   n_a,	n_b,	n_pog,	b_pogmp,	d_1u_npog,	d_1u_apog,	d_1l_npog,	ls_nspog,	li_nspog,	pog_gl_sn_sn12,
                   sn_perp_ls,	sn_perp_li,	snperp_pog,	wits,	max1_nf,	max1_sn, upper_occ_pl_tv,	max1_upper_occ_pl,	mand1_lower_occ_pl,
@@ -397,14 +399,14 @@ class Patient_Model extends CI_Model
                 $this->db->query($sql, array(
                     $oRadiographAnalyze->ead,
                     $oRadiographAnalyze->i_i1u_nf ,  $oRadiographAnalyze->i_i1i_mp ,
-                    $oRadiographAnalyze->d_6u_nf , $oRadiographAnalyze->d_6l_mp ,
+                    $oRadiographAnalyze->i_6u_nf , $oRadiographAnalyze->d_6l_mp ,
                     $oRadiographAnalyze->d_ans_pns, $oRadiographAnalyze->d_n_ans ,
                     $oRadiographAnalyze->d_ans_gn,$oRadiographAnalyze->d_ar_go_1 ,
                     $oRadiographAnalyze->d_go_pog , $oRadiographAnalyze->d_ar_pt ,
                     $oRadiographAnalyze->d_pt_n , $oRadiographAnalyze->d_n_s ,
                     $oRadiographAnalyze->d_s_ar , $oRadiographAnalyze->d_ar_go_2,
-                    $oRadiographAnalyze->d_go_me , $oRadiographAnalyze->d_overjet2 ,
-                    $oRadiographAnalyze->d_overbite2,$oRadiographAnalyze->d_go_me_n_s ,
+                    $oRadiographAnalyze->d_go_me , $oRadiographAnalyze->d_overjet ,
+                    $oRadiographAnalyze->d_overbite,$oRadiographAnalyze->d_go_me_n_s ,
                     $oRadiographAnalyze->d_s_go_n_me ,$oRadiographAnalyze->d_ufh_lfh,
                     $oRadiographAnalyze->d_ns_pog,  $oRadiographAnalyze->d_gl_gl ,
                     $oRadiographAnalyze->d_a_sn , $oRadiographAnalyze->d_ls1u_ls ,
@@ -436,6 +438,7 @@ class Patient_Model extends CI_Model
             }
         }
         catch (Exception $e){
+            echo $e->getMessage();
             return false;
         }
         return true;
@@ -463,9 +466,9 @@ class Patient_Model extends CI_Model
     }
 
     public function newPatientCheckEad($sEad){
-        $sql = "SELECT * FROM patients WHERE 'EAD' = ?";
+        $sql = "SELECT * FROM patients WHERE ead = ?";
         $aResult = $this->db->query($sql, array($sEad));
-        if (!empty($aResult->results)){
+        if (!empty($aResult->result())){
             return false;
         }
         else{
@@ -513,18 +516,16 @@ class Patient_Model extends CI_Model
             return false;
         }
     }
+
     public function getResultAlgorithm($sPatientEAD){
         try{
-            $sql = "SELECT 
-                    maxilla_advancement,maxilla_pieces, maxilla_anterior, maxilla_posterior,
-                    maxilla_midline_rotation, mandible_advancement_setback, chin_advancement, chin_intrusion_extrusion
-                    FROM clinical_measurements WHERE patient_ead = ? ";
+            $sql = "SELECT * FROM results_algorithm WHERE patient_ead = ? ";
             $aPatient = $this->db->query($sql, array($sPatientEAD));
         }catch(SQLiteException $e){
             return false;
         }
         if ($aPatient->result() !=null){
-            return $aPatient->result();
+            return $aPatient->result()[0];
         }
         else{
             return false;

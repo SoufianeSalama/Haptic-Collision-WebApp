@@ -1,5 +1,5 @@
 <?php echo validation_errors(
-        '<div class="row"> 
+    '<div class="row"> 
                 <div class="col-md-12 alert alert-danger alert-dismissable">', '
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 </div>
@@ -37,18 +37,18 @@ if (isset($bAlert) && !empty($bAlert)){
                 <div class="table-responsive">
                     <table class="table table-striped custab" id="patientsTable">
                         <thead>
-                            <tr>
-                                <th>EAD</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Gender</th>
-                                <th>Age</th>
-                                <th>Excel file</th>
+                        <tr>
+                            <th>EAD</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Age</th>
+                            <th>Excel file</th>
 
-                                <!--<th>Radiograph Analyse data</th>
-                                <th>Clinical Measurments data</th>-->
-                                <th>Options</th>
-                            </tr>
+                            <!--<th>Radiograph Analyse data</th>
+                            <th>Clinical Measurments data</th>-->
+                            <th>Options</th>
+                        </tr>
                         </thead>
 
                         <tbody>
@@ -174,11 +174,11 @@ if (isset($bAlert) && !empty($bAlert)){
 
                     </div>
                     <?php echo form_close(); ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
 
+        </div>
     </div>
-</div>

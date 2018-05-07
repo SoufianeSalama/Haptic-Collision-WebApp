@@ -1,7 +1,10 @@
 <script>
-    document.getElementById("frmRegisterSubmit").disabled = true;
+    $(document).ready(function(){
+        $('#frmRegisterSubmit').hide();
+    });
+
     function enableSubmitBtn(){
-        document.getElementById("frmRegisterSubmit").disabled = false;
+        $('#frmRegisterSubmit').show();
     }
 </script>
 
@@ -25,13 +28,13 @@
                             <div class="col-xs-6 col-sm-6 col-md-6" >
                                 <div class="form-group" style="width: 100%; margin-top: 15px;">
                                     <label for="frmRegisterFirstName">First name</label>
-                                    <input type="text" name="frmRegisterFirstName" id="frmRegisterFirstName" class="form-control" placeholder="Sun" value="<?php echo set_value('frmRegisterFirstName'); ?>" >
+                                    <input type="text" name="frmRegisterFirstName" id="frmRegisterFirstName" class="form-control" placeholder="firstname" value="<?php echo set_value('frmRegisterFirstName'); ?>" >
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6"style="text-align: right;">
                                 <div class="form-group" style="width: 100%; margin-top: 15px;">
                                     <label for="frmRegisterLastName">Last name</label>
-                                    <input type="text" name="frmRegisterLastName" id="frmRegisterLastName" class="form-control" placeholder="Yi" value="<?php echo set_value('frmRegisterLastName'); ?>" >
+                                    <input type="text" name="frmRegisterLastName" id="frmRegisterLastName" class="form-control" placeholder="lastname" value="<?php echo set_value('frmRegisterLastName'); ?>" >
                                 </div>
                             </div>
                         </div>
@@ -106,7 +109,7 @@
                             <option value="BD">Bangladesh</option>
                             <option value="BB">Barbados</option>
                             <option value="BY">Belarus</option>
-                            <option value="BE">Belgium</option>
+                            <option value="BE" selected>Belgium</option>
                             <option value="BZ">Belize</option>
                             <option value="BJ">Benin</option>
                             <option value="BM">Bermuda</option>
@@ -339,12 +342,12 @@
 
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <label for="frmRegisterEmail">Email address</label>
-                        <input type="email" name="frmRegisterEmail" id="frmRegisterEmail" class="form-control" placeholder="sun.yi@uzleuven.be" value="<?php echo set_value('frmRegisterEmail'); ?>" >
+                        <input type="email" name="frmRegisterEmail" id="frmRegisterEmail" class="form-control" placeholder="xxxxxx@xxx.xxx" value="<?php echo set_value('frmRegisterEmail'); ?>" >
                     </div>
 
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <label for="frmRegisterUsername">Username</label>
-                        <input type="text" name="frmRegisterUsername" id="frmRegisterUsername" class="form-control" placeholder="sun.yi" value="<?php echo set_value('frmRegisterUsername'); ?>" >
+                        <input type="text" name="frmRegisterUsername" id="frmRegisterUsername" class="form-control" placeholder="username" value="<?php echo set_value('frmRegisterUsername'); ?>" >
                     </div>
 
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
@@ -354,7 +357,7 @@
 
                     <div class="form-group" style="width: 100%; margin-top: 15px;">
                         <label for="exampleFormControlInput1">Confirm password</label>
-                        <input type="password" name="frmRegisterConfirmPassword"  id="exampleFormControlInput1" class="form-control"  value="<?php echo set_value('frmRegisterConfirmPassword'); ?>" >
+                        <input type="password" name="frmRegisterConfirmPassword"  id="frmRegisterPasswordConfirm" class="form-control"  value="<?php echo set_value('frmRegisterConfirmPassword'); ?>" >
                     </div>
 
                     <div class="form-group" style="width: 100%; margin-top: 15px; margin:auto;">

@@ -11,20 +11,56 @@ if (isset($bAlert) && !empty($bAlert)){
 }
 ?>
 <script>
-    //$( ".loader" ).addClass( "off" );
-    //$( "body" ).css("background-color", "red");
+    $(document).ready(function(){
+        $( "#algorithm_succes" ).hide();
+        $( "#algorithm_error" ).hide();
+        $( "#clinicalmeas_error" ).hide();
+        $( "#radiographanalyze_error" ).hide();
+    });
+
+
     function runAlgorithm(patientEAD){
 
         $('#modalAlgorithm').modal('show');
         //$( ".loader" ).removeClass( "off" );
-        $.get('<?php echo base_url() ?>algorithm', { patientead: patientEAD }, function(data) {
-            console.log(data);
+        $.get('<?php echo base_url() ?>algorithm', { patientead: patientEAD }, function(json) {
+            var data = $.parseJSON(json);
+            console.log(data.result);
             $( ".loader" ).css("display", "none");
 
+            if (data.result){
+                $( "#algorithm_succes" ).show();
+                console.log(typeof data.d_maxilla_advancement );
+                $( "#maxilla_advancement_predicted" ).text(parseFloat(data.d_maxilla_advancement).toFixed(2));
+                $( "#maxilla_anterior_predicted" ).text(parseFloat(data.s_maxilla_anterior).toFixed(2));
+                $( "#maxilla_pieces_predicted" ).text(parseFloat(data.s_maxilla_pieces).toFixed(2));
+                $( "#maxilla_posterior_predicted" ).text(parseFloat(data.s_maxilla_posterior).toFixed(2));
+
+                $( "#maxilla_midline_rotation_predicted" ).text(parseFloat(data.s_maxilla_midline_rotation).toFixed(2));
+                $( "#mandible_advancement_setback_predicted" ).text(parseFloat(data.s_mandible_advancement_setback).toFixed(2));
+                $( "#chin_advancement_predicted" ).text(parseFloat(data.d_chin_advancement).toFixed(2));
+                $( "#chin_intrusion_extrusion_predicted" ).text(parseFloat(data.d_chin_intrusion_extrusion).toFixed(2));
+
+            }else {
+                if (!data.algorithm) {
+                    // ERROR with algorithm
+                    $("#algorithm_error").show();
+
+                } else if (!data.clinicalmeas) {
+                    // ERROR with clinical measurements
+                    $("#clinicalmeas_error").show();
+
+                } else if (!data.radiographanalyze) {
+                    // ERROR with radiograph analyze
+                    $("#radiographanalyze_error").show();
+
+                }
+            }
         });
     }
 </script>
 <div class="row">
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -48,8 +84,6 @@ if (isset($bAlert) && !empty($bAlert)){
         </div>
         <div class="panel-body">
             <div class="row">
-
-
                 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" >
                     <table style="margin:auto;text-align: center;">
                         <tr>
@@ -71,14 +105,14 @@ if (isset($bAlert) && !empty($bAlert)){
                         <tr>
                             <td style="padding-right: 50px;">Age:</td>
                             <?php
-                                $dateTime = new DateTime( $aPatient->birthdate);
-                                if ( empty($dateTime->format('Y'))){
-                                    $iAge="unknown";
-                                }
-                                else{
-                                    $iAge = date("Y") - $dateTime->format('Y') - 1;
-                                }
-                                echo "<td><strong>" . $iAge . "</strong></td>"; ?></td>
+                            $dateTime = new DateTime( $aPatient->birthdate);
+                            if ( empty($dateTime->format('Y'))){
+                                $iAge="unknown";
+                            }
+                            else{
+                                $iAge = date("Y") - $dateTime->format('Y') - 1;
+                            }
+                            echo "<td><strong>" . $iAge . "</strong></td>"; ?></td>
                         </tr>
                         <tr>
                             <td style="padding-right: 50px;">Notes:</td>
@@ -92,6 +126,7 @@ if (isset($bAlert) && !empty($bAlert)){
 
             <div class="row">
                 <div class="container">
+
                     <h4>Clinical Measurements:</h4>
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -235,35 +270,6 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <td><?php echo $aPatient->profile; ?></td>
                             </tr>
 
-                            <tr>
-                                <td>Maxilla-advancement:</td>
-                                <td><?php echo $aPatient->maxilla_advancement ; ?></td>
-
-                                <td>Maxilla pieces:</td>
-                                <td><?php echo $aPatient->maxilla_pieces ; ?></td>
-
-                                <td>Maxilla anterior:</td>
-                                <td><?php echo $aPatient->maxilla_anterior ; ?></td>
-
-                                <td>Maxilla posterior:</td>
-                                <td><?php echo $aPatient->maxilla_posterior ; ?></td>
-                            </tr>
-
-                            <tr>
-                                <td>Midline rotation:</td>
-                                <td><?php echo $aPatient->maxilla_midline_rotation ; ?></td>
-
-                                <td>Mandible-advancement/setback:</td>
-                                <td><?php echo $aPatient->mandible_advancement_setback  ; ?></td>
-
-                                <td>Chin-advancement/setback:</td>
-                                <td><?php echo $aPatient->chin_advancement  ; ?></td>
-
-                                <td>Chin-intrusion/extrusion:</td>
-                                <td><?php echo $aPatient->chin_intrusion_extrusion  ; ?></td>
-                            </tr>
-
-
                             </tbody>
                         </table>
                     </div>
@@ -281,10 +287,10 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <td><?php echo $aPatient->i1i_mp ; ?></td>
 
                                 <td>6u-NF:</td>
-                                <td><?php echo $aPatient->d_6u_nf ; ?></td>
+                                <td><?php $aPatient->d_6u_nf ; ?></td>
 
                                 <td>6l-MP:</td>
-                                <td><?php echo $aPatient->d_6l_mp ; ?></td>
+                                <td><?php $aPatient->d_6l_mp ; ?></td>
                             </tr>
 
                             <tr>
@@ -425,15 +431,15 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <td><?php echo $aPatient->b_pogmp  ; ?></td>
 
                                 <td>1u-NPog:</td>
-                                <td><?php echo $aPatient->d_1u_npog; ?></td>
+                                <td><?php echo $aPatient->d_1u_npog  ; ?></td>
                             </tr>
 
                             <tr>
                                 <td>1u-APog:</td>
-                                <td><?php echo $aPatient->d_1u_apog ; ?></td>
+                                <td><?php echo $aPatient->d_1u_apog  ; ?></td>
 
                                 <td>1l-NPog:</td>
-                                <td><?php echo $aPatient->d_1l_npog  ; ?></td>
+                                <td><?php echo $aPatient->d_1l_npog   ; ?></td>
 
                                 <td>Ls-NsPog':</td>
                                 <td><?php echo $aPatient->ls_nspog   ; ?></td>
@@ -444,10 +450,10 @@ if (isset($bAlert) && !empty($bAlert)){
 
                             <tr>
                                 <td>Pog'-Gl'Sn/Sn12°:</td>
-                                <td><?php echo $aPatient->d_1u_apog ; ?></td>
+                                <td><?php echo $aPatient->d_1u_apog  ; ?></td>
 
                                 <td>SnPerp-Ls:</td>
-                                <td><?php echo $aPatient->d_1l_npog  ; ?></td>
+                                <td><?php echo $aPatient->d_1l_npog   ; ?></td>
 
                                 <td>SnPerp-Li:</td>
                                 <td><?php echo $aPatient->ls_nspog   ; ?></td>
@@ -534,8 +540,87 @@ if (isset($bAlert) && !empty($bAlert)){
                     </div>
                     <hr>
 
-                    <h4>Results Algorithm:</h4>
+                    <?php
+                    if ($this->session->userdata('userlevel') == 1 || $this->session->userdata('userlevel') == 2) {
+                        ?>
+                        <h4>Clinical decision of Golden User:</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>Maxilla-advancement:</td>
+                                    <td><?php echo $aPatient->maxilla_advancement; ?></td>
 
+                                    <td>Maxilla pieces:</td>
+                                    <td><?php echo $aPatient->maxilla_pieces; ?></td>
+
+                                    <td>Maxilla anterior:</td>
+                                    <td><?php echo $aPatient->maxilla_anterior; ?></td>
+
+                                    <td>Maxilla posterior:</td>
+                                    <td><?php echo $aPatient->maxilla_posterior; ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Midline rotation:</td>
+                                    <td><?php echo $aPatient->maxilla_midline_rotation; ?></td>
+
+                                    <td>Mandible-advancement/setback:</td>
+                                    <td><?php echo $aPatient->mandible_advancement_setback; ?></td>
+
+                                    <td>Chin-advancement/setback:</td>
+                                    <td><?php echo $aPatient->chin_advancement; ?></td>
+
+                                    <td>Chin-intrusion/extrusion:</td>
+                                    <td><?php echo $aPatient->chin_intrusion_extrusion; ?></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <hr>
+
+                    <?php
+                    if ($aPatient->maxilla_advancement_predicted != null && $aPatient->maxilla_pieces_predicted != null) {
+                        ?>
+                        <h4>Results Algorithm:</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tbody>
+
+                                <tr>
+                                    <td>Maxilla-advancement:</td>
+                                    <td><?php echo round($aPatient->maxilla_advancement_predicted, 2) ; ?></td>
+
+                                    <td>Maxilla pieces:</td>
+                                    <td><?php echo round($aPatient->maxilla_pieces_predicted, 2) ; ?></td>
+
+                                    <td>Maxilla anterior:</td>
+                                    <td><?php echo round($aPatient->maxilla_anterior_predicted, 2) ; ?></td>
+
+                                    <td>Maxilla posterior:</td>
+                                    <td><?php echo round($aPatient->maxilla_posterior_predicted, 2) ; ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Midline rotation:</td>
+                                    <td><?php echo round($aPatient->maxilla_midline_rotation_predicted, 2) ; ?></td>
+
+                                    <td>Mandible-advancement/setback:</td>
+                                    <td><?php echo round($aPatient->mandible_advancement_setback_predicted, 2) ; ?></td>
+
+                                    <td>Chin-advancement/setback:</td>
+                                    <td><?php echo round($aPatient->chin_advancement_predicted, 2) ; ?></td>
+
+                                    <td>Chin-intrusion/extrusion:</td>
+                                    <td><?php echo round($aPatient->chin_intrusion_extrusion_predicted, 2) ; ?></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -670,28 +755,28 @@ if (isset($bAlert) && !empty($bAlert)){
                                 <label>Gummy smile posterieur (yes/no):</label>
 
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_gummy_smile_posterieur" value="1" <?php if($aPatient->gummy_smile_posterieur =='1'){ echo "checked";}; ?>>Yes</label>
+                                    <label><input type="radio" name="frmClinicalData_gummy_smile_posterieur" value="1" <?php if($aPatient->gummy_smile_posterieur =='yes'){ echo "checked";}; ?>>Yes</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_gummy_smile_posterieur" value="0" <?php if($aPatient->gummy_smile_posterieur =='0'){ echo "checked";}; ?>>No</label>
+                                    <label><input type="radio" name="frmClinicalData_gummy_smile_posterieur" value="0" <?php if($aPatient->gummy_smile_posterieur =='no'){ echo "checked";}; ?>>No</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Lip incompetence (yes/no):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_lip_incompetence" value="1" <?php if($aPatient->lip_incompetence  =='1'){ echo "checked";}; ?> >Yes</label>
+                                    <label><input type="radio" name="frmClinicalData_lip_incompetence" value="1" <?php if($aPatient->lip_incompetence  =='yes'){ echo "checked";}; ?> >Yes</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_lip_incompetence" value="0" <?php if($aPatient->lip_incompetence  =='0'){ echo "checked";}; ?>>No</label>
+                                    <label><input type="radio" name="frmClinicalData_lip_incompetence" value="0" <?php if($aPatient->lip_incompetence  =='no'){ echo "checked";}; ?>>No</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Curling out lower lip  (yes/no):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_curling_out_lower_lip" value="1" <?php if($aPatient->curling_out_lower_lip   =='1'){ echo "checked";}; ?>>Yes</label>
+                                    <label><input type="radio" name="frmClinicalData_curling_out_lower_lip" value="1" <?php if($aPatient->curling_out_lower_lip   =='yes'){ echo "checked";}; ?>>Yes</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_curling_out_lower_lip" value="0" <?php if($aPatient->curling_out_lower_lip   =='0'){ echo "checked";}; ?>>No</label>
+                                    <label><input type="radio" name="frmClinicalData_curling_out_lower_lip" value="0" <?php if($aPatient->curling_out_lower_lip   =='no'){ echo "checked";}; ?>>No</label>
                                 </div>
                             </div>
                         </div>
@@ -715,65 +800,65 @@ if (isset($bAlert) && !empty($bAlert)){
                             <div class="form-group">
                                 <label >Liptrap (lying back/normal/reversed):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="lying_back" >Lying back</label>
+                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="lying_back" <?php if($aPatient->lip_trap  =='lying_back'){ echo "checked";}; ?>>Lying back</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="normal">Normal</label>
+                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="normal" <?php if($aPatient->lip_trap  =='normal'){ echo "checked";}; ?>>Normal</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="reversed">Reversed</label>
+                                    <label><input type="radio" name="frmClinicalData_lip_trap" value="reversed" <?php if($aPatient->lip_trap  =='reversed'){ echo "checked";}; ?>>Reversed</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Indentations on lower lip (yes/no):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_indentations_on_lower_lip" value="1" <?php if($aPatient->indentations_on_lower_lip=='1'){ echo "checked";}; ?> >Yes</label>
+                                    <label><input type="radio" name="frmClinicalData_indentations_on_lower_lip" value="1" <?php if($aPatient->indentations_on_lower_lip=='yes'){ echo "checked";}; ?> >Yes</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_indentations_on_lower_lip" value="0" <?php if($aPatient->indentations_on_lower_lip=='0'){ echo "checked";}; ?>>No</label>
+                                    <label><input type="radio" name="frmClinicalData_indentations_on_lower_lip" value="0" <?php if($aPatient->indentations_on_lower_lip=='no'){ echo "checked";}; ?>>No</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Indentations in palatum (deck bite) (yes/no):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_indentations_in_palatum" value="1" <?php if($aPatient->indentations_in_palatum=='1'){ echo "checked";}; ?>>Yes</label>
+                                    <label><input type="radio" name="frmClinicalData_indentations_in_palatum" value="1" <?php if($aPatient->indentations_in_palatum=='yes'){ echo "checked";}; ?>>Yes</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_indentations_in_palatum" value="0" <?php if($aPatient->indentations_in_palatum=='0'){ echo "checked";}; ?>>No</label>
+                                    <label><input type="radio" name="frmClinicalData_indentations_in_palatum" value="0" <?php if($aPatient->indentations_in_palatum=='no'){ echo "checked";}; ?>>No</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Buccal corridor (yes/no):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_buccal_corridor" value="1" <?php if($aPatient->buccal_corridor=='1'){ echo "checked";}; ?>>Yes</label>
+                                    <label><input type="radio" name="frmClinicalData_buccal_corridor" value="1" <?php if($aPatient->buccal_corridor=='yes'){ echo "checked";}; ?>>Yes</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_buccal_corridor" value="0" <?php if($aPatient->buccal_corridor=='0'){ echo "checked";}; ?>>No</label>
+                                    <label><input type="radio" name="frmClinicalData_buccal_corridor" value="0" <?php if($aPatient->buccal_corridor=='no'){ echo "checked";}; ?>>No</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Nose description (snub/straight/hump):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="snub_nose" >Snub</label>
+                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="snub_nose"<?php if($aPatient->nose_decription  =='snub_nose'){ echo "checked";}; ?>>Snub</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="straight">Straight</label>
+                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="straight" <?php if($aPatient->nose_decription  =='straight'){ echo "checked";}; ?>>Straight</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="hump">Hump</label>
+                                    <label><input type="radio" name="frmClinicalData_nose_decription" value="hump" <?php if($aPatient->nose_decription  =='hump'){ echo "checked";}; ?>>Hump</label>
                                 </div>
 
                             </div>
                             <div class="form-group">
                                 <label >Nasolabial angle (stub/sharp/straight):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="stub" >Stub</label>
+                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="stub" <?php if($aPatient->nasolabial_angle  =='stub'){ echo "checked";}; ?>>Stub</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="sharp">Sharp</label>
+                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="sharp" <?php if($aPatient->nasolabial_angle  =='sharp'){ echo "checked";}; ?>>Sharp</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="straight">Straight</label>
+                                    <label><input type="radio" name="frmClinicalData_nasolabial_angle" value="straight" <?php if($aPatient->nasolabial_angle  =='straight'){ echo "checked";}; ?>>Straight</label>
                                 </div>
                             </div>
                         </div>
@@ -781,55 +866,55 @@ if (isset($bAlert) && !empty($bAlert)){
                             <div class="form-group">
                                 <label >Oribtae (normal/lying back/..):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_oribtae" value="normal">Normal</label>
+                                    <label><input type="radio" name="frmClinicalData_oribtae" value="normal" <?php if($aPatient->oribtae  =='normal'){ echo "checked";}; ?>>Normal</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_oribtae" value="lying_back">Lying back</label>
+                                    <label><input type="radio" name="frmClinicalData_oribtae" value="lying_back" <?php if($aPatient->oribtae  =='lying_back'){ echo "checked";}; ?>>Lying back</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Zygomata (normal/lying back/..):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_zygomata" value="normal">Normal</label>
+                                    <label><input type="radio" name="frmClinicalData_zygomata" value="normal" <?php if($aPatient->zygomata  =='normal'){ echo "checked";}; ?>>Normal</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_zygomata" value="lying_back">Lying back</label>
+                                    <label><input type="radio" name="frmClinicalData_zygomata" value="lying_back" <?php if($aPatient->zygomata  =='lying_back'){ echo "checked";}; ?>>Lying back</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Pommette (red/not divergent/divergent):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_pommette" value="red">Red</label>
+                                    <label><input type="radio" name="frmClinicalData_pommette" value="red" <?php if($aPatient->pommette  =='red'){ echo "checked";}; ?>>Red</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_pommette" value="not_divergent">Not divergent</label>
+                                    <label><input type="radio" name="frmClinicalData_pommette" value="not_divergent" <?php if($aPatient->pommette  =='not_divergent'){ echo "checked";}; ?>>Not divergent</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_pommette" value="divergent">Divergent</label>
+                                    <label><input type="radio" name="frmClinicalData_pommette" value="divergent" <?php if($aPatient->pommette  =='divergent'){ echo "checked";}; ?>>Divergent</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Paranasal fossa (yes/no):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="normal">Normal</label>
+                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="normal"  <?php if($aPatient->paranasale_fossa  =='normal'){ echo "checked";}; ?>>Normal</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="lying_back">Lying back</label>
+                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="lying_back"  <?php if($aPatient->paranasale_fossa  =='lying_back'){ echo "checked";}; ?>>Lying back</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="flattened">Flattened</label>
+                                    <label><input type="radio" name="frmClinicalData_paranasale_fossa" value="flattened"  <?php if($aPatient->paranasale_fossa  =='flattened'){ echo "checked";}; ?>>Flattened</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label >Chin fold (normal/distinct/flattened):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="normal">Normal</label>
+                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="normal" <?php if($aPatient->chin_fold  =='normal'){ echo "checked";}; ?>>Normal</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="distinct">Distinct</label>
+                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="distinct" <?php if($aPatient->chin_fold  =='distinct'){ echo "checked";}; ?>>Distinct</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="flattened">Flattened</label>
+                                    <label><input type="radio" name="frmClinicalData_chin_fold" value="flattened" <?php if($aPatient->chin_fold  =='flattened'){ echo "checked";}; ?>>Flattened</label>
                                 </div>
                             </div>
                         </div>
@@ -861,19 +946,19 @@ if (isset($bAlert) && !empty($bAlert)){
                             </div>
                             <div class="form-group">
                                 <label>Chin height (mm):</label>
-                                <input type="number" name="frmClinicalData_chin_height" class="form-control" >
+                                <input type="number" name="frmClinicalData_chin_height" class="form-control" value="<?php echo $aPatient->chin_height; ?>">
                             </div>
                             <div class="form-group">
                                 <label>Chin neck distance (mm):</label>
-                                <input type="number" name="frmClinicalData_chin_neck_distance" class="form-control" >
+                                <input type="number" name="frmClinicalData_chin_neck_distance" class="form-control" value="<?php echo $aPatient->chin_neck_distance; ?>">
                             </div>
                             <div class="form-group">
                                 <label>Chin neck transition (straight/blunt):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_chin_neck_transition" value="straight">Straight</label>
+                                    <label><input type="radio" name="frmClinicalData_chin_neck_transition" value="straight" <?php if($aPatient->chin_neck_transition  =='straight'){ echo "checked";}; ?> >Straight</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_chin_neck_transition" value="blunt">Blunt</label>
+                                    <label><input type="radio" name="frmClinicalData_chin_neck_transition" value="blunt" <?php if($aPatient->chin_neck_transition  =='blunt'){ echo "checked";}; ?>>Blunt</label>
                                 </div>
                             </div>
 
@@ -881,25 +966,23 @@ if (isset($bAlert) && !empty($bAlert)){
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Transverse ratio:</label>
-                                <div class="radio">
-                                    <input type="text" name="frmClinicalData_transverse_relation" class="form-control">
-                                </div>
+                                <input type="text" name="frmClinicalData_transverse_relation" class="form-control" value="<?php echo $aPatient->transverse_ratio; ?>">
 
                             </div>
                             <div class="form-group">
                                 <label>Face length ratio(.../.../...):</label>
-                                <input type="text" name="frmClinicalData_face_length_ratio" class="form-control" placeholder=".../.../..." >
+                                <input type="text" name="frmClinicalData_face_length_ratio" class="form-control" placeholder=".../.../..." value="<?php echo $aPatient->face_length_ratio; ?>">
                             </div>
                             <div class="form-group">
                                 <label >Profile (straight/convex/cancave):</label>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_profile" value="straight">Straight</label>
+                                    <label><input type="radio" name="frmClinicalData_profile" value="straight" <?php if($aPatient->profile  =='straight'){ echo "checked";}; ?>>Straight</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_profile" value="convex">Convex</label>
+                                    <label><input type="radio" name="frmClinicalData_profile" value="convex" <?php if($aPatient->profile  =='convex'){ echo "checked";}; ?>>Convex</label>
                                 </div>
                                 <div class="radio">
-                                    <label><input type="radio" name="frmClinicalData_profile" value="concave">Concave</label>
+                                    <label><input type="radio" name="frmClinicalData_profile" value="concave" <?php if($aPatient->profile  =='concave'){ echo "checked";}; ?>>Concave</label>
                                 </div>
                             </div>
                         </div>
@@ -1074,21 +1157,21 @@ if (isset($bAlert) && !empty($bAlert)){
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Maxilla-advancement (mm):</label>
-                            <input type="number" name="frmClinicalDecisionData_maxilla_advancement" class="form-control" value="<?php echo $aPatient->maxilla_advancement  ; ?>" >
+                            <input type="text" name="frmClinicalDecisionData_maxilla_advancement" class="form-control" value="<?php echo $aPatient->maxilla_advancement  ; ?>" >
                         </div>
                         <div class="form-group">
                             <label>Pieces (1/3):</label>
                             <div class="radio">
-                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="1">1 piece</label>
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="1" <?php if($aPatient->maxilla_pieces =='1 piece'){ echo "checked";}; ?>>1 piece</label>
                             </div>
                             <div class="radio">
-                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="2">2 pieces</label>
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="2" <?php if($aPatient->maxilla_pieces =='2 pieces'){ echo "checked";}; ?>> 2 pieces</label>
                             </div>
                             <div class="radio">
-                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="3">3 pieces</label>
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="3" <?php if($aPatient->maxilla_pieces =='3 pieces'){ echo "checked";}; ?>>3 pieces</label>
                             </div>
                             <div class="radio">
-                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="no">No</label>
+                                <label><input type="radio" name="frmClinicalDecisionData_maxilla_pieces" value="no" <?php if($aPatient->maxilla_pieces =='no'){ echo "checked";}; ?>>No</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -1132,11 +1215,11 @@ if (isset($bAlert) && !empty($bAlert)){
                         </div>
                         <div class="form-group">
                             <label>Chin-advancement/setback (mm):</label>
-                            <input type="number" name="frmClinicalDecisionData_chin_advancement" class="form-control" value="<?php echo $aPatient->chin_advancement; ?>">
+                            <input type="text" name="frmClinicalDecisionData_chin_advancement" class="form-control" value="<?php echo $aPatient->chin_advancement; ?>">
                         </div>
                         <div class="form-group">
                             <label>Chin-intrusion/extrusion:</label>
-                            <input type="number" name="frmClinicalDecisionData_chin_intrusion_extrusion" class="form-control" value="<?php echo $aPatient->chin_intrusion_extrusion; ?>" placeholder="extrusion 3 mm">
+                            <input type="text" name="frmClinicalDecisionData_chin_intrusion_extrusion" class="form-control" value="<?php echo $aPatient->chin_intrusion_extrusion; ?>" placeholder="extrusion 3 mm">
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-10  col-md-offset-1 form-group" style="width: 80%; margin-top: 15px;">
@@ -1149,3 +1232,111 @@ if (isset($bAlert) && !empty($bAlert)){
         </div>
     </div>
 </div>
+
+<!-- Modal: Run Algorithm -->
+<div id="modalAlgorithm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Running Algorithm</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="loader"></div>
+
+                <div class="row">
+                    <div id="algorithm_succes" class="col-md-12 alert alert-success alert-dismissable" style="text-align: center;">
+                        <strong>Success!</strong> Algorithm Succedded
+                        <br/>
+                        <br/>
+                        <div class="table-responsive">
+                            <table style="margin:auto;text-align: left;">
+                                <tbody>
+
+                                <tr>
+                                    <td style="padding-right: 20px;">Maxilla-advancement:</td>
+                                    <td id="maxilla_advancement_predicted"></td>
+                                <tr>
+                                </tr>
+                                <td style="padding-right: 20px;">Maxilla pieces:</td>
+                                <td id="maxilla_pieces_predicted"></td>
+                                <tr>
+                                </tr>
+                                <td style="padding-right: 20px;">Maxilla anterior:</td>
+                                <td id="maxilla_anterior_predicted"></td>
+                                <tr>
+                                </tr>
+                                <td style="padding-right: 20px;">Maxilla posterior:</td>
+                                <td id="maxilla_posterior_predicted"></td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding-right: 20px;">Midline rotation:</td>
+                                    <td id="maxilla_midline_rotation_predicted"></td>
+                                <tr>
+                                </tr>
+                                <td style="padding-right: 20px;">Mandible-advancement/setback:</td>
+                                <td id="mandible_advancement_setback_predicted"></td>
+                                <tr>
+                                </tr>
+                                <td style="padding-right: 20px;">Chin-advancement/setback:</td>
+                                <td id="chin_advancement_predicted"></td>
+                                <tr>
+                                </tr>
+                                <td style="padding-right: 20px;">Chin-intrusion/extrusion:</td>
+                                <td id="chin_intrusion_extrusion_predicted"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="algorithm_error" class="col-md-12 alert alert-danger alert-dismissable" style="text-align: center;">
+                        <strong>Error!</strong> Algorithm Failed
+                        <br/>
+                        <img src='<?php echo base_url(); ?>img/error_logo.png' alt='error_logo' width='25%' height='25%'/>
+                    </div>
+                    <div id="clinicalmeas_error" class="col-md-12 alert alert-danger alert-dismissable" style="text-align: center;">
+                        <strong>Error!</strong> Please provide the Clinical Measurements data of this patient
+                        <br/>
+                        <img src='<?php echo base_url(); ?>img/error_logo.png' alt='error_logo' width='25%' height='25%'/>
+                    </div>
+                    <div id="radiographanalyze_error" class="col-md-12 alert alert-danger alert-dismissable" style="text-align: center;">
+                        <strong>Error!</strong> Please provide the Radiograph Analyze data of this patient
+                        <br/>
+                        <img src='<?php echo base_url(); ?>img/error_logo.png' alt='error_logo' width='25%' height='25%'/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .loader {
+            margin: auto;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
+        .loader.off {
+            animation: none;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>

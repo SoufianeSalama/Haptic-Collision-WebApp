@@ -9,15 +9,15 @@ if (isset($bAlert) && !empty($bAlert)){
             </div>';*/
         ?>
         <div class="row">
-                <div class="col-md-12 alert alert-success" role="alert">
-                  <h4 class="alert-heading">Success!</h4>
-                  <p>User is modified/deleted</p>
-                </div>
-              </div>
+            <div class="col-md-12 alert alert-success" role="alert">
+                <h4 class="alert-heading">Success!</h4>
+                <p>User is modified/deleted</p>
+            </div>
+        </div>
 
         <script>
         </script>
-<?php
+        <?php
     }
 }
 ?>
@@ -42,6 +42,7 @@ if (isset($bAlert) && !empty($bAlert)){
                             <th>ID</th>
                             <th>First Name</th>
                             <th>Last Name</th>
+                            <th>Email</th>
                             <th>Surgical Experience</th>
                             <th>Function</th>
                             <th>Workplace</th>
@@ -52,41 +53,42 @@ if (isset($bAlert) && !empty($bAlert)){
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <?php
-                                    foreach ($aUsers as $aUser){
-                                ?>
-                                <tr>
-                                <td><?php echo $aUser->userid; ?>    </td>
-                                <td><?php echo $aUser->firstname; ?> </td>
-                                <td><?php echo $aUser->lastname; ?>  </td>
-                                <?php
-                                    if ($aUser->surgical_experience == 0){
-                                        echo "<td>Beginner</td>";
-                                    }elseif ($aUser->surgical_experience == 1) {
-                                        echo "<td>Intermediate</td>";
-                                    }elseif ($aUser->surgical_experience == 2) {
-                                        echo "<td>Expert</td>";
-                                    }
-                                ?>
-                                <td><?php echo $aUser->function; ?>  </td>
-                                <td><?php echo $aUser->workplace; ?> </td>
-                                <td><?php echo $aUser->country; ?>   </td>
-                                <?php
-                                    if ($aUser->approved){
-                                        echo "<td>Approved</td>";
-                                    }else {
-                                        echo "<td>Not approved</td>";
-                                    }
-                                ?>
-                                <td><button type="button" class="btn btn-warning btn-xs" onclick="modifyUserModal(<?php echo "'" . $aUser->userid . "','". $aUser->firstname . "','" .$aUser->lastname . "','" .$aUser->approved . "','" .$aUser->userlevel . "'"; ?>)">Modify</button></td>
-                                <td><button type="button" class="btn btn-danger btn-xs"  onclick="deleteUserModal(<?php echo "'" . $aUser->userid . "','". $aUser->firstname . "','" .$aUser->lastname . "'"; ?>)">Delete</button></td>
-                                </tr>
-                                <?php
-                                    }
+                        <tr>
+                            <?php
+                            foreach ($aUsers as $aUser){
+                            ?>
+                        <tr>
+                            <td><?php echo $aUser->userid; ?>    </td>
+                            <td><?php echo $aUser->firstname; ?> </td>
+                            <td><?php echo $aUser->lastname; ?>  </td>
+                            <td><?php echo $aUser->email; ?>  </td>
+                            <?php
+                            if ($aUser->surgical_experience == 0){
+                                echo "<td>Beginner</td>";
+                            }elseif ($aUser->surgical_experience == 1) {
+                                echo "<td>Intermediate</td>";
+                            }elseif ($aUser->surgical_experience == 2) {
+                                echo "<td>Expert</td>";
+                            }
+                            ?>
+                            <td><?php echo $aUser->function; ?>  </td>
+                            <td><?php echo $aUser->workplace; ?> </td>
+                            <td><?php echo $aUser->country; ?>   </td>
+                            <?php
+                            if ($aUser->approved){
+                                echo "<td>Approved</td>";
+                            }else {
+                                echo "<td>Not approved</td>";
+                            }
+                            ?>
+                            <td><button type="button" class="btn btn-warning btn-xs" onclick="modifyUserModal(<?php echo "'" . $aUser->userid . "','". $aUser->firstname . "','" .$aUser->lastname . "','" .$aUser->approved . "','" .$aUser->userlevel . "'"; ?>)">Modify</button></td>
+                            <td><button type="button" class="btn btn-danger btn-xs"  onclick="deleteUserModal(<?php echo "'" . $aUser->userid . "','". $aUser->firstname . "','" .$aUser->lastname . "'"; ?>)">Delete</button></td>
+                        </tr>
+                        <?php
+                        }
 
-                                ?>
-                                </tr>
+                        ?>
+                        </tr>
                         </tbody>
 
                     </table>
@@ -100,24 +102,24 @@ if (isset($bAlert) && !empty($bAlert)){
 <script>
 
     function modifyUserModal(userid, firstname, lastname, approved, userlevel) {
-            $('#modalUserModify').modal('show');
-            $('#modalUserModifyHeader').text("Modify user: " + firstname + " " + lastname);
+        $('#modalUserModify').modal('show');
+        $('#modalUserModifyHeader').text("Modify user: " + firstname + " " + lastname);
 
-            $("#frmModifyUserId").val(userid);
+        $("#frmModifyUserId").val(userid);
 
-            if (approved == 1){
-                $('#frmModifyUserApproved').prop('checked', true);
-            }else if (approved == 0){
-                $('#frmModifyUserNotApproved').prop('checked', false);
-            }
+        if (approved == 1){
+            $('#frmModifyUserApproved').prop('checked', true);
+        }else if (approved == 0){
+            $('#frmModifyUserNotApproved').prop('checked', true);
+        }
 
-            if (userlevel == 0){
-                $('#frmModifyUserLevelBasic').attr('checked', true);
-            }else if(userlevel == 1){
-                $('#frmModifyUserLevelGolden').attr('checked', true);
-            }else if(userlevel == 2){
-                $('#frmModifyUserLevelAdmin').attr('checked', true);
-            };
+        if (userlevel == 0){
+            $('#frmModifyUserLevelBasic').attr('checked', true);
+        }else if(userlevel == 1){
+            $('#frmModifyUserLevelGolden').attr('checked', true);
+        }else if(userlevel == 2){
+            $('#frmModifyUserLevelAdmin').attr('checked', true);
+        };
     }
 
     function deleteUserModal(userid, firstname, lastname) {
@@ -162,29 +164,29 @@ if (isset($bAlert) && !empty($bAlert)){
             <div class="modal-body">
                 <div class="row">
                     <?php echo form_open('modifyuser'); ?>
-                        <div class="col-sm-12 col-md-10  col-md-offset-1 ">
-                            <h5>User Level</h5>
-                            <div class="form-group" style="width: 100%; margin-top: 15px;">
-                                <label class="radio-inline"><input type="radio" name="frmModifyUserLevel" id="frmModifyUserLevelBasic"    value="0">Basic user</label>
-                                <label class="radio-inline"><input type="radio" name="frmModifyUserLevel" id="frmModifyUserLevelGolden"   value="1">Golden user</label>
-                                <label class="radio-inline"><input type="radio" name="frmModifyUserLevel" id="frmModifyUserLevelAdmin"    value="2">Administrator</label>
-                            </div>
-                            <hr />
-                            <div class="form-check" style="width: 100%; margin-top: 15px;">
-                                <!--<input class="form-check-input" type="checkbox" name="frmModifyUserApproved" id="frmModifyUserApproved">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Approved
-                                </label>-->
-                                <label class="radio-inline"><input type="radio" name="frmModifyUserApproved" id="frmModifyUserApproved" value="1">Approved</label>
-                                <label class="radio-inline"><input type="radio" name="frmModifyUserApproved" id="frmModifyUserNotApproved" value="0">Not Approved</label>
-
-                            </div>
-                            <br />
-                            <input type="hidden" name="frmModifyUserId" id="frmModifyUserId" />
-                            <div class="form-group">
-                                <input name="frmModifyUserSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Save">
-                            </div>
+                    <div class="col-sm-12 col-md-10  col-md-offset-1 ">
+                        <h5>User Level</h5>
+                        <div class="form-group" style="width: 100%; margin-top: 15px;">
+                            <label class="radio-inline"><input type="radio" name="frmModifyUserLevel" id="frmModifyUserLevelBasic"    value="0">Basic user</label>
+                            <label class="radio-inline"><input type="radio" name="frmModifyUserLevel" id="frmModifyUserLevelGolden"   value="1">Golden user</label>
+                            <label class="radio-inline"><input type="radio" name="frmModifyUserLevel" id="frmModifyUserLevelAdmin"    value="2">Administrator</label>
                         </div>
+                        <hr />
+                        <div class="form-check" style="width: 100%; margin-top: 15px;">
+                            <!--<input class="form-check-input" type="checkbox" name="frmModifyUserApproved" id="frmModifyUserApproved">
+                            <label class="form-check-label" for="defaultCheck1">
+                                Approved
+                            </label>-->
+                            <label class="radio-inline"><input type="radio" name="frmModifyUserApproved" id="frmModifyUserApproved" value="1">Approved</label>
+                            <label class="radio-inline"><input type="radio" name="frmModifyUserApproved" id="frmModifyUserNotApproved" value="0">Not Approved</label>
+
+                        </div>
+                        <br />
+                        <input type="hidden" name="frmModifyUserId" id="frmModifyUserId" />
+                        <div class="form-group">
+                            <input name="frmModifyUserSubmit" type="submit" class="btn btn-lg btn-primary btn-block" value="Save">
+                        </div>
+                    </div>
                     </form>
                 </div>
                 <div class="modal-footer">
